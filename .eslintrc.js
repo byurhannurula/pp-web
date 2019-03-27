@@ -18,7 +18,9 @@ module.exports = {
     browser: true,
   },
   rules: {
+    'no-alert': 0,
     'no-console': 0,
+    'comma-dangle': 0,
     'no-use-before-define': 0,
     'no-underscore-dangle': 0,
     'no-param-reassign': [
@@ -28,7 +30,19 @@ module.exports = {
       },
     ],
     'jsx-a11y/href-no-hash': 0,
+    'jsx-a11y/anchor-is-valid': [
+      'warn',
+      {
+        aspects: ['invalidHref'],
+      },
+    ],
     'import/prefer-default-export': 0,
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'react/prefer-stateless-function': 0,
+    'react/jsx-filename-extension': [
+      1,
+      {
+        extensions: ['.js', '.jsx'],
+      },
+    ],
   },
 }

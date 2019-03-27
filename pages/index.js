@@ -1,5 +1,11 @@
 import React from 'react'
+import { Header } from '../components/common'
 
-const Home = () => <h1>Hello World!</h1>
+const Home = () => (
+  <>
+    <Header />
+    <h2>Helloo..</h2>
+  </>
+)
 
 export default Home
