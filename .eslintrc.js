@@ -36,13 +36,17 @@ module.exports = {
         aspects: ['invalidHref'],
       },
     ],
+    'jsx-a11y/label-has-for': 0,
+    'jsx-a11y/label-has-associated-control': 0,
     'import/prefer-default-export': 0,
     'react/prefer-stateless-function': 0,
+    'react/jsx-one-expression-per-line': 0,
     'react/jsx-filename-extension': [
       1,
       {
         extensions: ['.js', '.jsx'],
       },
     ],
+    'react/prop-types': 0,
   },
 }

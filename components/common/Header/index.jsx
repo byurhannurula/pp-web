@@ -1,47 +1,21 @@
 import React from 'react'
-import Link from 'next/link'
+import { Container, Row, Col, Button } from 'reactstrap'
 
-import { LogoutIcon } from '../SVG'
-import { Container } from '../Container'
-import { HeaderWrapper, Wrapper, Brand, Nav, NavList } from './styles'
-
-const Header = () => (
-  <HeaderWrapper>
-    <Wrapper as={Container}>
-      <Brand href="/">PokerPlanning</Brand>
-      <Nav>
-        <NavList>
-          <li>
-            <Link href="/">
-              <a>Dashboard</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/">
-              <a>Deck Builder</a>
-            </Link>
-          </li>
-          <li className="seperator" />
-          <li>
-            <img
-              src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg"
-              alt="avatar"
-            />
-            <Link href="/">
-              <a>Byurhan Beyzat</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/">
-              <a>
-                <LogoutIcon />
-              </a>
-            </Link>
-          </li>
-        </NavList>
-      </Nav>
-    </Wrapper>
-  </HeaderWrapper>
+export const Header = () => (
+  <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
+    <Container className="d-flex align-items-center" fluid>
+      <Row>
+        <Col lg="8" md="10">
+          <h1 className="display-2 text-white">Hello Jesse</h1>
+          <p className="text-white mt-0 mb-5">
+            This is your profile page. You can see the progress. This is your
+            profile page. You can see the progress.
+          </p>
+          <Button type="button" color="primary">
+            Create new project
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  </div>
 )
-
-export { Header }
