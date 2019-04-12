@@ -10,10 +10,10 @@ import {
   Table,
 } from 'reactstrap'
 import Layout from '../components/layout/Layout'
-import { Header } from '../components/common'
+import { Header } from '../components'
 
 const Index = () => (
-  <Layout>
+  <Layout title="Dashboard">
     <Header />
     {/* Page content */}
     <Container className="mt--7" fluid>

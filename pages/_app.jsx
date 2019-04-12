@@ -1,6 +1,7 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import { ApolloProvider } from 'react-apollo'
+
 import checkLoggedIn from '../lib/checkLoggedIn'
 import withApollo from '../lib/withApollo'
 import redirect from '../lib/redirect'
@@ -23,6 +24,7 @@ class MyApp extends App {
       // User is not logged in. Redirect to Login.
       if (!auth) redirect(ctx, '/login')
     } else if (auth) {
+      console.log(loggedInUser)
       // User is logged in. Redirect to Dashboard.
       redirect(ctx, '/')
     }

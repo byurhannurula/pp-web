@@ -13,10 +13,10 @@ import {
   Col,
 } from 'reactstrap'
 import Layout from '../components/layout/Layout'
-import { UserHeader } from '../components/common/header/user-header'
+import { UserHeader } from '../components/header/user-header'
 
-const Index = () => (
-  <Layout>
+const ProfilePage = () => (
+  <Layout title="Profile">
     <UserHeader />
     {/* Page content */}
     <Container className="mt--7" fluid>
@@ -157,4 +157,4 @@ const Index = () => (
   </Layout>
 )
 
-export default Index
+export default ProfilePage

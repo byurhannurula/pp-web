@@ -1,17 +1,17 @@
 import gql from 'graphql-tag'
 
 export const SIGNIN_MUTATION = gql`
-  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+  mutation Signin($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
       id
-      email
       name
+      email
     }
   }
 `
 
 export const SIGNUP_MUTATION = gql`
-  mutation SIGNIN_MUTATION(
+  mutation SIGNUP_MUTATION(
     $name: String!
     $email: String!
     $password: String!

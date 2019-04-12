@@ -1,6 +1,6 @@
 import React from 'react'
 import Login from '../components/views/login'
 
-const Index = () => <Login />
+const LoginPage = () => <Login />
 
-export default Index
+export default LoginPage

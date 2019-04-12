@@ -1,10 +1,12 @@
 import React from 'react'
 
 import { Container } from 'reactstrap'
-import { Sidebar, Footer, Navigation } from '../common'
+import { Sidebar, Footer, Navigation } from '..'
+import Meta from '../Meta'
 
-const Layout = ({ children }) => (
+const Layout = ({ children, title }) => (
   <>
+    <Meta title={title} />
     <Sidebar
       logo={{
         innerLink: '',

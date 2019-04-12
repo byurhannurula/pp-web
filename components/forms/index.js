@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   FormGroup,
-  Input,
   InputGroupAddon,
   InputGroupText,
   InputGroup,
@@ -10,9 +9,10 @@ import {
 
 export const InputField = ({
   type = 'text',
-  placeholder = '',
   className = '',
+  placeholder = '',
   iconClassName = '',
+  ...rest
 }) => {
   return (
     <FormGroup className={className}>
@@ -22,7 +22,12 @@ export const InputField = ({
             <i className={iconClassName} />
           </InputGroupText>
         </InputGroupAddon>
-        <Input type={type} placeholder={placeholder} />
+        <input
+          type={type}
+          placeholder={placeholder}
+          className="form-control"
+          {...rest}
+        />
       </InputGroup>
     </FormGroup>
   )

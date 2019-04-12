@@ -41,7 +41,7 @@ export const Sidebar = () => {
         {/* Brand */}
         <NavbarBrand className="pt-0">
           <img
-            src={require('../../../assets/img/brand/argon-react.png')}
+            src={require('../../img/brand/argon-react.png')}
             alt="PokerPlanning"
             className="navbar-brand-img"
           />
@@ -87,7 +87,7 @@ export const Sidebar = () => {
               <Col className="collapse-brand" xs="6">
                 <Link href="/">
                   <img
-                    src={require('../../../assets/img/brand/argon-react.png')}
+                    src={require('../../img/brand/argon-react.png')}
                     alt="PokerPlanning"
                   />
                 </Link>
