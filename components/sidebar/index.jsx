@@ -20,7 +20,7 @@ import {
   Col,
 } from 'reactstrap'
 
-export const Sidebar = () => {
+export const Sidebar = ({ logo }) => {
   const [isCollapsed, toggleCollapse] = useState(false)
 
   return (
@@ -41,8 +41,8 @@ export const Sidebar = () => {
         {/* Brand */}
         <NavbarBrand className="pt-0">
           <img
-            src={require('../../img/brand/argon-react.png')}
-            alt="PokerPlanning"
+            src={logo.imgSrc}
+            alt={logo.imgAlt}
             className="navbar-brand-img"
           />
         </NavbarBrand>
@@ -85,12 +85,7 @@ export const Sidebar = () => {
           <div className="navbar-collapse-header d-md-none">
             <Row>
               <Col className="collapse-brand" xs="6">
-                <Link href="/">
-                  <img
-                    src={require('../../img/brand/argon-react.png')}
-                    alt="PokerPlanning"
-                  />
-                </Link>
+                <img src={logo.imgSrc} alt={logo.imgAlt} />
               </Col>
               <Col className="collapse-close" xs="6">
                 <button

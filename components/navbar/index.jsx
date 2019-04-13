@@ -19,7 +19,7 @@ import {
   Media,
 } from 'reactstrap'
 
-export const Navigation = () => (
+export const Navigation = ({ user }) => (
   <>
     <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
       <Container fluid>
@@ -40,14 +40,11 @@ export const Navigation = () => (
             <DropdownToggle className="pr-0" nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                    alt="navbar profile"
-                  />
+                  <img src={user.avatar} alt={user.name} />
                 </span>
                 <Media className="ml-2 d-none d-lg-block">
                   <span className="mb-0 text-sm font-weight-bold">
-                    Jessica Jones
+                    {user.name}
                   </span>
                 </Media>
               </Media>
