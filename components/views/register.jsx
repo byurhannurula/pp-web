@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import {
   Button,
@@ -20,9 +20,9 @@ import Error from '../ErrorMessage'
 import { GET_USER, SIGNUP_MUTATION } from '../../graphql'
 
 const Register = () => {
-  let name
-  let email
-  let password
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <Mutation
@@ -37,7 +37,7 @@ const Register = () => {
         console.log(error)
       }}
     >
-      {(signUp, { error, loading }) => (
+      {(register, { error, loading }) => (
         <AuthLayout title="Register">
           <Col lg="5" md="7">
             <Card className="bg-secondary shadow border-0">
@@ -60,17 +60,17 @@ const Register = () => {
                   onSubmit={async e => {
                     e.preventDefault()
                     e.stopPropagation()
-                    await signUp({
+                    await register({
                       variables: {
-                        name: name.value,
-                        email: email.value,
-                        password: password.value,
+                        name,
+                        email,
+                        password,
                       },
                     })
 
-                    name.value = ''
-                    email.value = ''
-                    password.value = ''
+                    setName('')
+                    setEmail('')
+                    setPassword('')
                   }}
                 >
                   <fieldset disabled={loading} aria-busy={loading}>
@@ -85,11 +85,10 @@ const Register = () => {
                         <input
                           type="text"
                           name="name"
+                          value={name}
                           placeholder="Name"
                           className="form-control"
-                          ref={node => {
-                            name = node
-                          }}
+                          onChange={e => setName(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -103,11 +102,10 @@ const Register = () => {
                         <input
                           type="email"
                           name="email"
+                          value={email}
                           placeholder="Email"
                           className="form-control"
-                          ref={node => {
-                            email = node
-                          }}
+                          onChange={e => setEmail(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -121,11 +119,10 @@ const Register = () => {
                         <input
                           type="password"
                           name="password"
+                          value={password}
                           placeholder="Password"
                           className="form-control"
-                          ref={node => {
-                            password = node
-                          }}
+                          onChange={e => setPassword(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>

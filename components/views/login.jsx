@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
 import {
   Col,
@@ -20,8 +20,8 @@ import Error from '../ErrorMessage'
 import { GET_USER, SIGNIN_MUTATION } from '../../graphql'
 
 const Login = () => {
-  let email
-  let password
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <Mutation
@@ -61,12 +61,12 @@ const Login = () => {
                     e.stopPropagation()
                     await login({
                       variables: {
-                        email: email.value,
-                        password: password.value,
+                        email,
+                        password,
                       },
                     })
-                    email.value = ''
-                    password.value = ''
+                    setEmail('')
+                    setPassword('')
                   }}
                 >
                   <fieldset disabled={loading} aria-busy={loading}>
@@ -81,11 +81,10 @@ const Login = () => {
                         <input
                           type="email"
                           name="email"
+                          value={email}
                           placeholder="Email"
                           className="form-control"
-                          ref={node => {
-                            email = node
-                          }}
+                          onChange={e => setEmail(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -99,11 +98,10 @@ const Login = () => {
                         <input
                           type="password"
                           name="password"
+                          value={password}
                           placeholder="Password"
                           className="form-control"
-                          ref={node => {
-                            password = node
-                          }}
+                          onChange={e => setPassword(e.target.value)}
                         />
                       </InputGroup>
                     </FormGroup>
