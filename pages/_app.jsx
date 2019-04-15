@@ -24,7 +24,6 @@ class MyApp extends App {
       // User is not logged in. Redirect to Login.
       if (!auth) redirect(ctx, '/login')
     } else if (auth) {
-      console.log(loggedInUser)
       // User is logged in. Redirect to Dashboard.
       redirect(ctx, '/')
     }
@@ -33,15 +32,15 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    return { pageProps }
+    return { pageProps, loggedInUser }
   }
 
   render() {
-    const { Component, pageProps, apolloClient } = this.props
+    const { Component, pageProps, apolloClient, loggedInUser } = this.props
     return (
       <Container>
         <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
+          <Component {...pageProps} loggedInUser={loggedInUser} />
         </ApolloProvider>
       </Container>
     )

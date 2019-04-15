@@ -6,6 +6,9 @@ export const GET_USER = gql`
       id
       name
       email
+      avatar
+      createdAt
+      updatedAt
     }
   }
 `

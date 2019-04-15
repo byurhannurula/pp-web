@@ -1,8 +1,8 @@
 /*eslint-disable*/
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Signout from '../Signout'
 
-// reactstrap components
 import {
   Collapse,
   DropdownMenu,
@@ -20,7 +20,7 @@ import {
   Col,
 } from 'reactstrap'
 
-export const Sidebar = ({ logo }) => {
+export const Sidebar = ({ logo, data }) => {
   const [isCollapsed, toggleCollapse] = useState(false)
 
   return (
@@ -52,10 +52,7 @@ export const Sidebar = ({ logo }) => {
             <DropdownToggle nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                    alt="sidebar profile"
-                  />
+                  <img src={data.avatar} alt={data.name} />
                 </span>
               </Media>
             </DropdownToggle>
@@ -63,19 +60,14 @@ export const Sidebar = ({ logo }) => {
               <DropdownItem className="noti-title" header tag="div">
                 <h6 className="text-overflow m-0">Welcome!</h6>
               </DropdownItem>
-              <DropdownItem href="/profile">
-                <>
+              <Link href="/profile">
+                <DropdownItem>
                   <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </>
-              </DropdownItem>
+                  <span>Profile</span>
+                </DropdownItem>
+              </Link>
               <DropdownItem divider />
-              <DropdownItem href="#" onClick={e => e.preventDefault()}>
-                <>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </>
-              </DropdownItem>
+              <Signout />
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>

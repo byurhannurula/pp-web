@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import Link from 'next/link'
-
+import Signout from '../Signout'
 import {
   DropdownMenu,
   DropdownItem,
@@ -19,8 +19,8 @@ import {
   Media,
 } from 'reactstrap'
 
-export const Navigation = ({ user }) => (
-  <>
+export const Navigation = ({ data }) => {
+  return (
     <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
       <Container fluid>
         <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-lg-inline d-md-flex ml-lg-auto">
@@ -40,11 +40,11 @@ export const Navigation = ({ user }) => (
             <DropdownToggle className="pr-0" nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img src={user.avatar} alt={user.name} />
+                  <img src={data.avatar} alt={data.name} />
                 </span>
                 <Media className="ml-2 d-none d-lg-block">
                   <span className="mb-0 text-sm font-weight-bold">
-                    {user.name}
+                    {data.name}
                   </span>
                 </Media>
               </Media>
@@ -55,23 +55,16 @@ export const Navigation = ({ user }) => (
               </DropdownItem>
               <Link href="/profile">
                 <DropdownItem>
-                  <>
-                    <i className="ni ni-single-02" />
-                    <span>My profile</span>
-                  </>
+                  <i className="ni ni-single-02" />
+                  <span>My profile</span>
                 </DropdownItem>
               </Link>
               <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
-                <>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </>
-              </DropdownItem>
+              <Signout />
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
       </Container>
     </Navbar>
-  </>
-)
+  )
+}
