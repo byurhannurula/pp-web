@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
+import Link from 'next/link'
 import {
+  Row,
   Col,
   Button,
   Card,
@@ -39,9 +41,9 @@ const Login = () => {
       {(login, { loading, error }) => (
         <AuthLayout title="Login">
           <Col lg="5" md="7">
-            <Card className="bg-secondary shadow border-0 mt-4">
+            <Card className="bg-secondary shadow border-0">
               <CardHeader className="bg-transparent pb-5">
-                <div className="text-muted text-center mt-2 mb-4">
+                <div className="text-muted text-center mt-2 mb-3">
                   <small>Sign in with</small>
                 </div>
                 <div className="text-center">
@@ -51,7 +53,7 @@ const Login = () => {
               </CardHeader>
               <CardBody className="px-lg-5 py-lg-5">
                 <div className="text-center text-muted mb-4">
-                  <small>or sign in with credentials</small>
+                  <small>Or sign in with credentials</small>
                 </div>
                 <Form
                   role="form"
@@ -118,6 +120,22 @@ const Login = () => {
                 </Form>
               </CardBody>
             </Card>
+            <Row className="mt-3 mb-5">
+              <Col xs="6">
+                <Link href="#pablo">
+                  <a className="text-primary">
+                    <small>Forgot password?</small>
+                  </a>
+                </Link>
+              </Col>
+              <Col className="text-right" xs="6">
+                <Link href="/register">
+                  <a className="text-primary">
+                    <small>Create new account</small>
+                  </a>
+                </Link>
+              </Col>
+            </Row>
           </Col>
         </AuthLayout>
       )}

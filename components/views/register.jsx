@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
+import Link from 'next/link'
 import {
   Button,
   Card,
@@ -10,6 +11,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
+  Row,
   Col,
 } from 'reactstrap'
 import redirect from '../../lib/redirect'
@@ -126,6 +128,16 @@ const Register = () => {
                         />
                       </InputGroup>
                     </FormGroup>
+                    <Row className="text-center">
+                      <Col xs="12">
+                        <span className="text-muted text-sm">
+                          By signing up, you agree with the{' '}
+                          <Link href="#pablo">
+                            <a className="text-primary">Privacy Policy</a>
+                          </Link>
+                        </span>
+                      </Col>
+                    </Row>
                     <div className="text-center">
                       <Button
                         className="mt-4 px-4"
@@ -139,6 +151,15 @@ const Register = () => {
                 </Form>
               </CardBody>
             </Card>
+            <Row className="mt-3 mb-5">
+              <Col className="text-center" xs="12">
+                <Link href="/login">
+                  <a className="text-primary">
+                    <small>Already have an account?</small>
+                  </a>
+                </Link>
+              </Col>
+            </Row>
           </Col>
         </AuthLayout>
       )}

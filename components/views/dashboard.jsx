@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import {
   Container,
   Row,
@@ -66,13 +67,9 @@ const Index = () => (
                     <tbody>
                       <tr>
                         <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm">
-                                Argon Design System
-                              </span>
-                            </Media>
-                          </Media>
+                          <Link href="#pablo">
+                            <a className="mb-0 text-sm">Argon Design System</a>
+                          </Link>
                         </th>
                         <td>
                           <Badge color="" className="badge-dot mr-4">
@@ -157,13 +154,9 @@ const Index = () => (
                       </tr>
                       <tr>
                         <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm">
-                                Argon Design System
-                              </span>
-                            </Media>
-                          </Media>
+                          <Link href="#pablo">
+                            <a className="mb-0 text-sm">Argon Design System</a>
+                          </Link>
                         </th>
                         <td>
                           <Badge color="" className="badge-dot mr-4">

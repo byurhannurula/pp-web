@@ -28,17 +28,14 @@ const Profile = () => (
               backgroundPosition: 'center top',
             }}
           >
-            {/* Mask */}
             <span className="mask bg-gradient-default opacity-8" />
-            {/* Header container */}
             <Container className="d-flex align-items-center" fluid>
               <Row>
-                <Col lg="7" md="10">
+                <Col lg="10" md="10">
                   <h1 className="display-2 text-white">Hello {me.name}</h1>
                   <p className="text-white mt-0 mb-4">
                     This is your profile page. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Blanditiis odio impedit ipsum
-                    unde dignissimos earum sapiente.
+                    consectetur adipisicing elit.
                   </p>
                 </Col>
               </Row>
