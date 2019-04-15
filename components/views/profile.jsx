@@ -132,7 +132,7 @@ const Profile = () => (
                               <Input
                                 id="input-email"
                                 className="form-control-alternative"
-                                placeholder="jesse@example.com"
+                                placeholder={me.email}
                                 type="email"
                               />
                             </FormGroup>
