@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import PropTypes from 'prop-types'
-
 const ErrorStyles = styled.div`
   padding: 16px;
   background: white;
@@ -36,18 +34,9 @@ const DisplayError = ({ error }) => {
     <ErrorStyles>
       <p data-test="graphql-error">
         {error.message.replace('GraphQL error: ', '')}
-        {/* {error.graphQLErrors[0].extensions.exception.details[0].message} */}
       </p>
     </ErrorStyles>
   )
-}
-
-DisplayError.defaultProps = {
-  error: {},
-}
-
-DisplayError.propTypes = {
-  error: PropTypes.object,
 }
 
 export default DisplayError

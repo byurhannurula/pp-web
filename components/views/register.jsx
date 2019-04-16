@@ -15,7 +15,7 @@ import {
   Col,
 } from 'reactstrap'
 import redirect from '../../lib/redirect'
-import { GithubButton, GoogleButton } from '..'
+import { GithubButton, GoogleButton } from '../common'
 import AuthLayout from '../layout/AuthLayout'
 import Error from '../ErrorMessage'
 

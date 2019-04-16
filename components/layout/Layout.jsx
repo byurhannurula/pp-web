@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Container } from 'reactstrap'
-import { Sidebar, Footer, Navigation } from '..'
+import { Row, Col, Container } from 'reactstrap'
+import { Sidebar, Navigation } from '../common'
 import User from '../User'
 import Meta from '../Meta'
+import LogoImg from '../../img/brand/logo.png'
 
 const Layout = ({ children, title }) => (
   <User>
@@ -15,7 +16,7 @@ const Layout = ({ children, title }) => (
           <Sidebar
             data={me}
             logo={{
-              imgSrc: require('../../img/brand/logo.png'),
+              imgSrc: LogoImg,
               imgAlt: 'PokerPlanning',
             }}
           />
@@ -23,7 +24,18 @@ const Layout = ({ children, title }) => (
             <Navigation data={me} />
             {children}
             <Container fluid>
-              <Footer />
+              <footer className="footer">
+                <Row className="align-items-center justify-content-xl-between justify-content-xl-end">
+                  <Col xl="6">
+                    <div className="copyright text-center text-xl-left text-muted">
+                      &copy; {new Date().getFullYear()}
+                      <a className="font-weight-bold ml-1" href="/">
+                        PokerPlanning
+                      </a>
+                    </div>
+                  </Col>
+                </Row>
+              </footer>
             </Container>
           </div>
         </>

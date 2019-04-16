@@ -16,7 +16,7 @@ import {
 } from 'reactstrap'
 import redirect from '../../lib/redirect'
 import AuthLayout from '../layout/AuthLayout'
-import { GithubButton, GoogleButton } from '..'
+import { GithubButton, GoogleButton } from '../common'
 import Error from '../ErrorMessage'
 
 import { GET_USER, SIGNIN_MUTATION } from '../../graphql'

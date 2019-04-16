@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useState } from 'react'
 import Link from 'next/link'
-import Signout from '../Signout'
+import Signout from '../../Signout'
 
 import {
   Collapse,
