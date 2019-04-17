@@ -12,7 +12,7 @@ app
   .then(() => {
     server
       .use(cookieParser())
-      .use(handle)
+      .get('*', (req, res) => handle(req, res))
       .listen(process.env.PORT || 3000)
   })
   .catch(err => {
