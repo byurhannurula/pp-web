@@ -1,11 +1,19 @@
 import React from 'react'
-
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo } from 'react-apollo'
 import { DropdownItem } from 'reactstrap'
+import redirect from '../lib/redirect'
 import { GET_USER, SIGNOUT_MUTATION } from '../graphql'
 
-const Signout = () => (
-  <Mutation mutation={SIGNOUT_MUTATION} refetchQueries={[{ query: GET_USER }]}>
+const Signout = ({ client }) => (
+  <Mutation
+    mutation={SIGNOUT_MUTATION}
+    refetchQueries={[{ query: GET_USER }]}
+    onCompleted={() => {
+      client.cache.reset().then(() => {
+        redirect({}, '/login')
+      })
+    }}
+  >
     {signOut => (
       <DropdownItem href="/login" onClick={signOut}>
         <i className="ni ni-user-run" />
@@ -15,4 +23,4 @@ const Signout = () => (
   </Mutation>
 )
 
-export default Signout
+export default withApollo(Signout)

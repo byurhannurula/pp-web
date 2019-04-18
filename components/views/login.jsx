@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo } from 'react-apollo'
 import Link from 'next/link'
 import {
   Row,
@@ -21,7 +21,7 @@ import Error from '../ErrorMessage'
 
 import { GET_USER, SIGNIN_MUTATION } from '../../graphql'
 
-const Login = () => {
+const Login = ({ client }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -30,7 +30,11 @@ const Login = () => {
       mutation={SIGNIN_MUTATION}
       refetchQueries={[{ query: GET_USER }]}
       onCompleted={data => {
-        redirect({}, '/')
+        // Force a reload of all the current queries now that the user is
+        // logged in
+        client.cache.reset().then(() => {
+          redirect({}, '/')
+        })
         console.log(data)
       }}
       onError={error => {
@@ -143,4 +147,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default withApollo(Login)

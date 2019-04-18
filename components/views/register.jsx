@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo } from 'react-apollo'
 import Link from 'next/link'
 import {
   Button,
@@ -21,7 +21,7 @@ import Error from '../ErrorMessage'
 
 import { GET_USER, SIGNUP_MUTATION } from '../../graphql'
 
-const Register = () => {
+const Register = ({ client }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -31,11 +31,12 @@ const Register = () => {
       mutation={SIGNUP_MUTATION}
       refetchQueries={[{ query: GET_USER }]}
       onCompleted={data => {
-        redirect({}, '/')
+        client.cache.reset().then(() => {
+          redirect({}, '/')
+        })
         console.log(data)
       }}
       onError={error => {
-        // If you want to send error to external service?
         console.log(error)
       }}
     >
@@ -166,4 +167,4 @@ const Register = () => {
     </Mutation>
   )
 }
-export default Register
+export default withApollo(Register)
