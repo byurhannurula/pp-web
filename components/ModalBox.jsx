@@ -5,6 +5,7 @@ const ModalBox = ({
   children,
   isToggled,
   modalTitle = '',
+  buttonTitle = '',
   onClose,
   onCreate,
 }) => {
@@ -27,7 +28,7 @@ const ModalBox = ({
       <div className="modal-body">{children}</div>
       <div className="modal-footer">
         <Button type="button" color="primary" onClick={onCreate}>
-          Create
+          {buttonTitle || `Create`}
         </Button>
         <Button
           type="button"

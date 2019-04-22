@@ -329,7 +329,7 @@ const Index = () => {
                   </Card>
                 </div>
               </Row>
-              <Row className="mt-6">
+              <Row>
                 <Col md="6">
                   <ModalBox
                     isToggled={isToggled}
@@ -338,19 +338,28 @@ const Index = () => {
                     onClose={() => toggleModal(!isToggled)}
                   >
                     <Form>
+                      <Row>
+                        <Col md="7" className="pr-0">
+                          <FormGroup>
+                            <Input type="text" placeholder="Enter room name" />
+                          </FormGroup>
+                        </Col>
+                        <Col md="5">
+                          <FormGroup>
+                            <Input type="select">
+                              <option value="1">Fibonacci</option>
+                              <option value="2">Modified Fibonacci</option>
+                              <option value="3">Powers of 2</option>
+                              <option value="4">T-Shirt</option>
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                      </Row>
                       <FormGroup>
-                        <Input type="text" placeholder="Enter room name" />
-                      </FormGroup>
-                      <FormGroup>
-                        <Input type="select">
-                          <option value="1">Fibonacci</option>
-                          <option value="2">Modified Fibonacci</option>
-                          <option value="3">Powers of 2</option>
-                          <option value="4">T-Shirt</option>
-                        </Input>
-                      </FormGroup>
-                      <FormGroup>
-                        <Input placeholder="Enter stories, put each story on new line." />
+                        <Input
+                          type="textarea"
+                          placeholder="Enter stories, put each story on new line."
+                        />
                       </FormGroup>
                     </Form>
                   </ModalBox>
