@@ -1,6 +1,7 @@
 const express = require('express')
 const next = require('next')
 const cookieParser = require('cookie-parser')
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })

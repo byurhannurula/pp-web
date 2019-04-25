@@ -3,9 +3,13 @@ import { Button } from 'reactstrap'
 import GithubIcon from '../../../img/icons/github.svg'
 import GoogleIcon from '../../../img/icons/google.svg'
 
-export const GithubButton = ({ href = '', color = 'default' }) => {
+export const GithubButton = ({ color = 'default' }) => {
   return (
-    <Button className="btn-neutral btn-icon" color={color} href={href}>
+    <Button
+      color={color}
+      className="btn-neutral btn-icon"
+      href={`${process.env.SERVER_URL}/auth/github`}
+    >
       <span className="btn-inner--icon">
         <img alt="Github" src={GithubIcon} />
       </span>
@@ -14,9 +18,13 @@ export const GithubButton = ({ href = '', color = 'default' }) => {
   )
 }
 
-export const GoogleButton = ({ href = '', color = 'default' }) => {
+export const GoogleButton = ({ color = 'default' }) => {
   return (
-    <Button className="btn-neutral btn-icon" color={color} href={href}>
+    <Button
+      color={color}
+      className="btn-neutral btn-icon"
+      href={`${process.env.SERVER_URL}/auth/google`}
+    >
       <span className="btn-inner--icon">
         <img alt="Google" src={GoogleIcon} />
       </span>
