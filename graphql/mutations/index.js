@@ -29,3 +29,44 @@ export const SIGNOUT_MUTATION = gql`
     signOut
   }
 `
+
+export const START_SESSION_MUTATION = gql`
+  mutation START_SESSION_MUTATION(
+    $name: String!
+    $cardSet: String
+    $polls: String
+  ) {
+    startSession(name: $name, cardSet: $cardSet, polls: $polls) {
+      id
+      name
+      cardSet
+      createdBy {
+        id
+        name
+        avatar
+      }
+    }
+  }
+`
+
+export const UPDATE_SESSION_MUTATION = gql`
+  mutation UPDATE_SESSION_MUTATION(
+    $id: String!
+    $name: String
+    $cardSet: String
+  ) {
+    updateSession(id: $id, name: $name, cardSet: $cardSet) {
+      id
+      name
+      cardSet
+    }
+  }
+`
+
+export const DELETE_SESSION_MUTATION = gql`
+  mutation DELETE_SESSION_MUTATION($id: String!) {
+    deleteSession(id: $id) {
+      message
+    }
+  }
+`

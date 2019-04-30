@@ -51,8 +51,8 @@ const Login = ({ client }) => {
                   <small>Sign in with</small>
                 </div>
                 <div className="text-center">
-                  <GithubButton href="/" />
-                  <GoogleButton href="/" />
+                  <GithubButton />
+                  <GoogleButton />
                 </div>
               </CardHeader>
               <CardBody className="px-lg-5 py-lg-5">

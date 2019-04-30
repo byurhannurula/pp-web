@@ -27,7 +27,7 @@ const ModalBox = ({
       </div>
       <div className="modal-body">{children}</div>
       <div className="modal-footer">
-        <Button type="button" color="primary" onClick={onCreate}>
+        <Button type="submit" color="primary" onClick={onCreate}>
           {buttonTitle || `Create`}
         </Button>
         <Button

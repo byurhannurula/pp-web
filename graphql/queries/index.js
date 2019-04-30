@@ -5,23 +5,42 @@ export const GET_USER = gql`
     me {
       id
       name
+      bio
       email
       avatar
+      sessions {
+        id
+        name
+        createdBy {
+          id
+          name
+          avatar
+        }
+        members {
+          id
+          name
+          avatar
+        }
+      }
       createdAt
-      updatedAt
     }
   }
 `
 
-export const GET_ROOMS = gql`
-  query getRooms {
-    rooms {
+export const GET_SESSIONS = gql`
+  query getSessions {
+    getSessions {
       id
       name
-      cardValues
-      createdBy
-      users
-      date
+      cardSet
+      createdBy {
+        id
+        name
+      }
+      members {
+        id
+        name
+      }
       createdAt
       updatedAt
     }

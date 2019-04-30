@@ -1,5 +1,8 @@
+/* eslint-disable react/display-name */
+/* eslin-disable */
 import React, { useState } from 'react'
-import Link from 'next/link'
+import { Mutation } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import {
   Container,
   Row,
@@ -8,49 +11,56 @@ import {
   CardHeader,
   Button,
   Table,
-  Badge,
   Form,
-  Input,
   FormGroup,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Progress,
-  UncontrolledTooltip,
 } from 'reactstrap'
 import User from '../User'
 import ModalBox from '../ModalBox'
 import Layout from '../layout/Layout'
+import SessionItem from '../SessionItem'
+import PaginationComponent from '../Pagination'
+
+import { START_SESSION_MUTATION } from '../../graphql'
+
+const Composed = adopt({
+  user: ({ render }) => <User>{render}</User>,
+  startSession: ({ render }) => (
+    <Mutation mutation={START_SESSION_MUTATION}>{render}</Mutation>
+  ),
+})
 
 const Index = () => {
   const [isToggled, toggleModal] = useState(false)
+  const [state, setState] = useState({ name: '', cardSet: '', polls: '' })
 
-  const createRoom = () => {
+  const handleChange = e => {
+    setState({ ...state, [e.target.name]: e.target.value })
+  }
+
+  const createSession = () => {
     toggleModal(!isToggled)
-    console.log('Creating Room!!')
-    console.log('Created!!')
+    console.log('Starting Session!!')
+    console.log({ ...state })
+    console.log('Started!!')
   }
 
   return (
-    <User>
-      {({ data }) => {
-        const me = data ? data.me : null
+    <Composed>
+      {({ user, startSession }) => {
+        const me = user.data ? user.data.me : null
+        const { sessions } = me
+
+        console.log(me, sessions)
         return (
           <Layout title="Dashboard">
             <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
               <Container className="d-flex align-items-center" fluid>
                 <Row>
-                  <Col lg="8" md="10">
-                    <h1 className="display-2 text-white">Hello {me.name}</h1>
-                    <p className="text-white mt-0 mb-5">
-                      This is your profile page. You can see the progress. This
-                      is your profile page. You can see the progress.
-                    </p>
+                  <Col lg="12" md="10">
+                    <h1 className="display-2 text-white mb-3">
+                      Hello, {me.name}
+                    </h1>
                     <Button
                       type="button"
                       color="primary"
@@ -64,11 +74,11 @@ const Index = () => {
             </div>
             {/* Page content */}
             <Container className="mt--7" fluid>
-              <Row className="mt-5">
+              <Row className="mt-3">
                 <div className="col">
                   <Card className="shadow">
                     <CardHeader className="border-0">
-                      <h3 className="mb-0">Card tables</h3>
+                      <h3 className="mb-0">Sessions</h3>
                     </CardHeader>
                     <Table
                       className="align-items-center table-flush"
@@ -76,255 +86,24 @@ const Index = () => {
                     >
                       <thead className="thead-light">
                         <tr>
-                          <th scope="col">Project</th>
-                          <th scope="col">Status</th>
+                          <th scope="col">Session Name</th>
+                          <th scope="col">Created By</th>
                           <th scope="col">Users</th>
-                          <th scope="col">Completion</th>
+                          <th scope="col">Status</th>
                           <th scope="col" />
                         </tr>
                       </thead>
                       <tbody>
+                        {me.sessions.map(session => (
+                          <SessionItem session={session} key={session.id} />
+                        ))}
                         <tr>
-                          <th scope="row">
-                            <Link href="#pablo">
-                              <a className="mb-0 text-sm">
-                                Argon Design System
-                              </a>
-                            </Link>
-                          </th>
-                          <td>
-                            <Badge color="" className="badge-dot mr-4">
-                              <i className="bg-warning" />
-                              pending
-                            </Badge>
-                          </td>
-                          <td>
-                            <div className="avatar-group">
-                              <a
-                                className="avatar avatar-sm"
-                                href="#pablo"
-                                id="tooltip123"
-                                onClick={e => e.preventDefault()}
-                              >
-                                <img
-                                  alt={me.name}
-                                  className="rounded-circle"
-                                  src={me.avatar}
-                                />
-                              </a>
-                              <UncontrolledTooltip
-                                delay={0}
-                                target="tooltip123"
-                              >
-                                {me.name}
-                              </UncontrolledTooltip>
-                              <a
-                                className="avatar avatar-sm"
-                                href="#pablo"
-                                id="tooltip123"
-                                onClick={e => e.preventDefault()}
-                              >
-                                <img
-                                  alt={me.name}
-                                  className="rounded-circle"
-                                  src={me.avatar}
-                                />
-                              </a>
-                              <UncontrolledTooltip
-                                delay={0}
-                                target="tooltip123"
-                              >
-                                {me.name}
-                              </UncontrolledTooltip>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <span className="mr-2">60%</span>
-                              <div>
-                                <Progress
-                                  max="100"
-                                  value="60"
-                                  barClassName="bg-danger"
-                                />
-                              </div>
-                            </div>
-                          </td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={e => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu
-                                className="dropdown-menu-arrow"
-                                right
-                              >
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Edit Project
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Delete Project
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            <Link href="#pablo">
-                              <a className="mb-0 text-sm">
-                                Argon Design System
-                              </a>
-                            </Link>
-                          </th>
-                          <td>
-                            <Badge color="" className="badge-dot mr-4">
-                              <i className="bg-warning" />
-                              pending
-                            </Badge>
-                          </td>
-                          <td>
-                            <div className="avatar-group">
-                              <a
-                                className="avatar avatar-sm"
-                                href="#pablo"
-                                id="tooltip123"
-                                onClick={e => e.preventDefault()}
-                              >
-                                <img
-                                  alt={me.name}
-                                  className="rounded-circle"
-                                  src={me.avatar}
-                                />
-                              </a>
-                              <UncontrolledTooltip
-                                delay={0}
-                                target="tooltip123"
-                              >
-                                {me.name}
-                              </UncontrolledTooltip>
-                              <a
-                                className="avatar avatar-sm"
-                                href="#pablo"
-                                id="tooltip123"
-                                onClick={e => e.preventDefault()}
-                              >
-                                <img
-                                  alt={me.name}
-                                  className="rounded-circle"
-                                  src={me.avatar}
-                                />
-                              </a>
-                              <UncontrolledTooltip
-                                delay={0}
-                                target="tooltip123"
-                              >
-                                {me.name}
-                              </UncontrolledTooltip>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <span className="mr-2">60%</span>
-                              <div>
-                                <Progress
-                                  max="100"
-                                  value="60"
-                                  barClassName="bg-danger"
-                                />
-                              </div>
-                            </div>
-                          </td>
-                          <td className="text-right">
-                            <UncontrolledDropdown>
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={e => e.preventDefault()}
-                              >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                              <DropdownMenu
-                                className="dropdown-menu-arrow"
-                                right
-                              >
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Edit Project
-                                </DropdownItem>
-                                <DropdownItem
-                                  href="#pablo"
-                                  onClick={e => e.preventDefault()}
-                                >
-                                  Delete Project
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
-                          </td>
+                          {!me.sessions.length === 0 && <td>No sessions</td>}
                         </tr>
                       </tbody>
                     </Table>
                     <CardFooter className="py-4">
-                      <nav aria-label="...">
-                        <Pagination
-                          className="pagination justify-content-end mb-0"
-                          listClassName="justify-content-end mb-0"
-                        >
-                          <PaginationItem className="disabled">
-                            <PaginationLink
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                              tabIndex="-1"
-                            >
-                              <i className="fas fa-angle-left" />
-                              <span className="sr-only">Previous</span>
-                            </PaginationLink>
-                          </PaginationItem>
-                          <PaginationItem className="active">
-                            <PaginationLink
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                            >
-                              1
-                            </PaginationLink>
-                          </PaginationItem>
-                          <PaginationItem>
-                            <PaginationLink
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                            >
-                              2 <span className="sr-only">(current)</span>
-                            </PaginationLink>
-                          </PaginationItem>
-                          <PaginationItem>
-                            <PaginationLink
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                            >
-                              <i className="fas fa-angle-right" />
-                              <span className="sr-only">Next</span>
-                            </PaginationLink>
-                          </PaginationItem>
-                        </Pagination>
-                      </nav>
+                      <PaginationComponent />
                     </CardFooter>
                   </Card>
                 </div>
@@ -333,31 +112,61 @@ const Index = () => {
                 <Col md="6">
                   <ModalBox
                     isToggled={isToggled}
-                    modalTitle="Create Room"
-                    onCreate={() => createRoom()}
+                    modalTitle="Create Session"
+                    onCreate={() => createSession()}
                     onClose={() => toggleModal(!isToggled)}
                   >
-                    <Form>
+                    <Form
+                      method="post"
+                      onSubmit={async e => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        const res = await startSession({
+                          variables: { ...state },
+                        })
+                          .then(() => console.log(res))
+                          .catch(err => console.log(err))
+                        setState({ name: '', cardSet: '', polls: '' })
+
+                        console.log(res)
+                      }}
+                    >
                       <Row>
                         <Col md="7" className="pr-0">
                           <FormGroup>
-                            <Input type="text" placeholder="Enter room name" />
+                            <input
+                              type="text"
+                              name="name"
+                              value={state.name}
+                              className="form-control"
+                              onChange={handleChange}
+                              placeholder="Enter session name"
+                            />
                           </FormGroup>
                         </Col>
                         <Col md="5">
                           <FormGroup>
-                            <Input type="select">
-                              <option value="1">Fibonacci</option>
-                              <option value="2">Modified Fibonacci</option>
-                              <option value="3">Powers of 2</option>
-                              <option value="4">T-Shirt</option>
-                            </Input>
+                            <select
+                              name="cardSet"
+                              className="form-control"
+                              onChange={handleChange}
+                            >
+                              <option value="1,2,3,4,5,6">Fibonacci</option>
+                              <option>Modified Fibonacci</option>
+                              <option>Powers of 2</option>
+                              <option>T-Shirt</option>
+                            </select>
                           </FormGroup>
                         </Col>
                       </Row>
                       <FormGroup>
-                        <Input
+                        <input
+                          row="4"
                           type="textarea"
+                          name="polls"
+                          value={state.polls}
+                          className="form-control"
+                          onChange={handleChange}
                           placeholder="Enter stories, put each story on new line."
                         />
                       </FormGroup>
@@ -369,7 +178,7 @@ const Index = () => {
           </Layout>
         )
       }}
-    </User>
+    </Composed>
   )
 }
 export default Index
