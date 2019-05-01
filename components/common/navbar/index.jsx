@@ -23,7 +23,7 @@ export const Navigation = ({ data }) => {
   return (
     <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
       <Container fluid>
-        <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-lg-inline d-md-flex ml-lg-auto">
+        <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-lg-inline d-md-flex mr-lg-auto">
           <FormGroup className="mb-0">
             <InputGroup className="input-group-alternative">
               <InputGroupAddon addonType="prepend">

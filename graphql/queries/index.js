@@ -11,6 +11,7 @@ export const GET_USER = gql`
       sessions {
         id
         name
+        cardSet
         createdBy {
           id
           name
@@ -43,6 +44,27 @@ export const GET_SESSIONS = gql`
       }
       createdAt
       updatedAt
+    }
+  }
+`
+
+export const GET_SESSION = gql`
+  query getSession($id: ID!) {
+    getSession(id: $id) {
+      id
+      name
+      cardSet
+      createdBy {
+        id
+        name
+        avatar
+      }
+      members {
+        id
+        name
+        avatar
+      }
+      createdAt
     }
   }
 `

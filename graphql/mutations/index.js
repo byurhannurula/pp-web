@@ -39,12 +39,6 @@ export const START_SESSION_MUTATION = gql`
     startSession(name: $name, cardSet: $cardSet, polls: $polls) {
       id
       name
-      cardSet
-      createdBy {
-        id
-        name
-        avatar
-      }
     }
   }
 `

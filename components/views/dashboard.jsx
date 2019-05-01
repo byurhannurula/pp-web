@@ -21,12 +21,17 @@ import Layout from '../layout/Layout'
 import SessionItem from '../SessionItem'
 import PaginationComponent from '../Pagination'
 
-import { START_SESSION_MUTATION } from '../../graphql'
+import { START_SESSION_MUTATION, GET_USER } from '../../graphql'
 
 const Composed = adopt({
   user: ({ render }) => <User>{render}</User>,
-  startSession: ({ render }) => (
-    <Mutation mutation={START_SESSION_MUTATION}>{render}</Mutation>
+  startSessionMutation: ({ render }) => (
+    <Mutation
+      mutation={START_SESSION_MUTATION}
+      refetchQueries={[{ query: GET_USER }]}
+    >
+      {render}
+    </Mutation>
   ),
 })
 
@@ -38,20 +43,11 @@ const Index = () => {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
-  const createSession = () => {
-    toggleModal(!isToggled)
-    console.log('Starting Session!!')
-    console.log({ ...state })
-    console.log('Started!!')
-  }
-
   return (
     <Composed>
-      {({ user, startSession }) => {
+      {({ user, startSessionMutation }) => {
         const me = user.data ? user.data.me : null
-        const { sessions } = me
 
-        console.log(me, sessions)
         return (
           <Layout title="Dashboard">
             <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -89,7 +85,6 @@ const Index = () => {
                           <th scope="col">Session Name</th>
                           <th scope="col">Created By</th>
                           <th scope="col">Users</th>
-                          <th scope="col">Status</th>
                           <th scope="col" />
                         </tr>
                       </thead>
@@ -110,29 +105,18 @@ const Index = () => {
               </Row>
               <Row>
                 <Col md="6">
-                  <ModalBox
-                    isToggled={isToggled}
-                    modalTitle="Create Session"
-                    onCreate={() => createSession()}
-                    onClose={() => toggleModal(!isToggled)}
-                  >
+                  <ModalBox isToggled={isToggled} modalTitle="Create Session">
                     <Form
                       method="post"
                       onSubmit={async e => {
                         e.preventDefault()
-                        e.stopPropagation()
-                        const res = await startSession({
-                          variables: { ...state },
-                        })
-                          .then(() => console.log(res))
-                          .catch(err => console.log(err))
+                        await startSessionMutation({ variables: { ...state } })
                         setState({ name: '', cardSet: '', polls: '' })
-
-                        console.log(res)
+                        toggleModal(!isToggled)
                       }}
                     >
                       <Row>
-                        <Col md="7" className="pr-0">
+                        <Col sm="7" md="7" className="pr-0">
                           <FormGroup>
                             <input
                               type="text"
@@ -144,14 +128,19 @@ const Index = () => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col md="5">
+
+                        <Col sm="5" md="5">
                           <FormGroup>
                             <select
                               name="cardSet"
+                              value={state.cardSet}
                               className="form-control"
                               onChange={handleChange}
                             >
-                              <option value="1,2,3,4,5,6">Fibonacci</option>
+                              <option value="0" selected>
+                                Card Set
+                              </option>
+                              <option>Fibonacci</option>
                               <option>Modified Fibonacci</option>
                               <option>Powers of 2</option>
                               <option>T-Shirt</option>
@@ -165,11 +154,25 @@ const Index = () => {
                           type="textarea"
                           name="polls"
                           value={state.polls}
-                          className="form-control"
+                          className="form-control mb-5"
                           onChange={handleChange}
                           placeholder="Enter stories, put each story on new line."
                         />
                       </FormGroup>
+
+                      <Col className="d-flex justify-content-end">
+                        <Button type="submit" color="primary">
+                          Create
+                        </Button>
+                        <Button
+                          type="button"
+                          color="secondary"
+                          data-dismiss="modal"
+                          onClick={() => toggleModal(!isToggled)}
+                        >
+                          Cancel
+                        </Button>
+                      </Col>
                     </Form>
                   </ModalBox>
                 </Col>

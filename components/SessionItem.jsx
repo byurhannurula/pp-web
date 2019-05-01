@@ -4,7 +4,6 @@ import { Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import Link from 'next/link'
 import {
-  Badge,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
@@ -12,14 +11,28 @@ import {
   UncontrolledDropdown,
 } from 'reactstrap'
 
-import { UPDATE_SESSION_MUTATION, DELETE_SESSION_MUTATION } from '../graphql'
+import {
+  GET_USER,
+  UPDATE_SESSION_MUTATION,
+  DELETE_SESSION_MUTATION,
+} from '../graphql'
 
 const Composed = adopt({
   updateSession: ({ render }) => (
-    <Mutation mutation={UPDATE_SESSION_MUTATION}>{render}</Mutation>
+    <Mutation
+      mutation={UPDATE_SESSION_MUTATION}
+      refetchQueries={[{ query: GET_USER }]}
+    >
+      {render}
+    </Mutation>
   ),
   deleteSession: ({ render }) => (
-    <Mutation mutation={DELETE_SESSION_MUTATION}>{render}</Mutation>
+    <Mutation
+      mutation={DELETE_SESSION_MUTATION}
+      refetchQueries={[{ query: GET_USER }]}
+    >
+      {render}
+    </Mutation>
   ),
 })
 
@@ -57,32 +70,24 @@ const SessionItem = ({ session }) => {
               )}
             </td>
 
-            <td>
-              {session.members.id && (
-                <div className="avatar-group">
-                  <img
-                    id="topic2"
-                    alt={session.members.name}
-                    className="avatar avatar-sm rounded-circle"
-                    src={session.members.avatar}
-                  />
+            {session.members && (
+              <td>
+                {session.members.map(member => (
+                  <div className="avatar-group" key={member.id}>
+                    <img
+                      id="user-1"
+                      alt={member.name}
+                      className="avatar avatar-sm rounded-circle"
+                      src={member.avatar}
+                    />
 
-                  <UncontrolledTooltip delay={0} target="topic2">
-                    {session.members.name}
-                  </UncontrolledTooltip>
-                </div>
-              )}
-              {!session.members.id && `No users`}
-            </td>
-
-            <td>
-              {session.members && (
-                <Badge color="" className="badge-dot mr-4">
-                  <i className="bg-success" />
-                  active
-                </Badge>
-              )}
-            </td>
+                    <UncontrolledTooltip delay={0} target="user-1">
+                      {member.name}
+                    </UncontrolledTooltip>
+                  </div>
+                ))}
+              </td>
+            )}
 
             <td className="text-right">
               <UncontrolledDropdown>
@@ -97,14 +102,13 @@ const SessionItem = ({ session }) => {
                   <DropdownItem
                     onClick={async e => {
                       e.preventDefault()
-                      const res = await updateSession({
-                        id: session.id,
-                        name: session.name,
-                        cardSet: session.cardSet,
+                      await updateSession({
+                        variables: {
+                          id: session.id,
+                          name: session.name,
+                          cardSet: session.cardSet,
+                        },
                       })
-                        .then(() => console.log(res))
-                        .catch(err => console.log(err))
-                      console.log(res)
                     }}
                   >
                     Edit Session
@@ -112,7 +116,7 @@ const SessionItem = ({ session }) => {
                   <DropdownItem
                     onClick={async e => {
                       e.preventDefault()
-                      await deleteSession({ id: session.id })
+                      await deleteSession({ variables: { id: session.id } })
                     }}
                   >
                     Delete Session
