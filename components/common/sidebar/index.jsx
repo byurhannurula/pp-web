@@ -44,6 +44,7 @@ export const Sidebar = ({ logo, data }) => {
             src={logo.imgSrc}
             alt={logo.imgAlt}
             className="navbar-brand-img"
+            style={{ maxHeight: '3.5rem' }}
           />
         </NavbarBrand>
         {/* User */}
@@ -75,9 +76,13 @@ export const Sidebar = ({ logo, data }) => {
         <Collapse navbar isOpen={isCollapsed}>
           {/* Collapse header */}
           <div className="navbar-collapse-header d-md-none">
-            <Row>
+            <Row className="align-items-center">
               <Col className="collapse-brand" xs="6">
-                <img src={logo.imgSrc} alt={logo.imgAlt} />
+                <img
+                  src={logo.imgSrc}
+                  alt={logo.imgAlt}
+                  style={{ height: '48px' }}
+                />
               </Col>
               <Col className="collapse-close" xs="6">
                 <button

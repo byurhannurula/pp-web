@@ -30,6 +30,22 @@ export const SIGNOUT_MUTATION = gql`
   }
 `
 
+export const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION(
+    $id: String!
+    $name: String
+    $email: String
+    $bio: String
+  ) {
+    updateUser(id: $id, name: $name, bio: $bio, email: $email) {
+      id
+      name
+      email
+      avatar
+    }
+  }
+`
+
 export const START_SESSION_MUTATION = gql`
   mutation START_SESSION_MUTATION(
     $name: String!
@@ -61,6 +77,20 @@ export const DELETE_SESSION_MUTATION = gql`
   mutation DELETE_SESSION_MUTATION($id: String!) {
     deleteSession(id: $id) {
       message
+    }
+  }
+`
+
+export const ADD_POLL_MUTATION = gql`
+  mutation ADD_POLL_MUTATION(
+    $sessionId: String!
+    $topic: String!
+    $description: String
+  ) {
+    addPoll(sessionId: $sessionId, topic: $topic, description: $description) {
+      id
+      topic
+      description
     }
   }
 `

@@ -1,10 +1,10 @@
 import React from 'react'
-
+import Link from 'next/link'
 import { Row, Col, Container } from 'reactstrap'
 import { Sidebar, Navigation } from '../common'
 import User from '../User'
 import Meta from '../Meta'
-import LogoImg from '../../img/brand/logo.png'
+import LogoImg from '../../img/brand/logo.svg'
 
 const Layout = ({ children, title }) => (
   <User>
@@ -28,9 +28,28 @@ const Layout = ({ children, title }) => (
                 <Row className="align-items-center justify-content-xl-between justify-content-xl-end">
                   <Col xl="6">
                     <div className="copyright text-center text-xl-left text-muted">
-                      &copy; {new Date().getFullYear()}
-                      <a className="font-weight-bold ml-1" href="/">
-                        PokerPlanning
+                      &copy; {new Date().getFullYear()} &nbsp;
+                      <Link href="/">
+                        <a className="font-weight-bold ml-1">PokerPlanning</a>
+                      </Link>
+                    </div>
+                  </Col>
+                </Row>
+                <Row className="align-items-center justify-content-xl-between justify-content-xl-end">
+                  <Col xl="6">
+                    <div className="copyright text-center text-xl-left text-muted">
+                      Made{' '}
+                      <span role="img" aria-label="Computer">
+                        👨🏻‍💻
+                      </span>{' '}
+                      by{' '}
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://byurhanbeyzat.com"
+                        className="font-weight-bold ml-1"
+                      >
+                        Byurhan Beyzat
                       </a>
                     </div>
                   </Col>

@@ -44,10 +44,8 @@ const SessionItem = ({ session }) => {
           <tr>
             <th scope="row">
               <Link
-                href={{
-                  pathname: '/session',
-                  query: { id: session.id },
-                }}
+                href={`/session/?session=${session.id}`}
+                as={`/session/${session.id}`}
               >
                 <a className="mb-0 text-sm">{session.name}</a>
               </Link>

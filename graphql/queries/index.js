@@ -42,6 +42,11 @@ export const GET_SESSIONS = gql`
         id
         name
       }
+      polls {
+        id
+        topic
+        description
+      }
       createdAt
       updatedAt
     }
@@ -63,6 +68,11 @@ export const GET_SESSION = gql`
         id
         name
         avatar
+      }
+      polls {
+        id
+        topic
+        description
       }
       createdAt
     }

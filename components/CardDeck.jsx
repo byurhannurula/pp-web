@@ -2,7 +2,7 @@ import React from 'react'
 
 const Fibonacci = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?', 'Pass', '☕️']
 const ModifiedFibonacci = [0, '½', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?', 'Pass']
-const PowersOf2 = [0, 1, 2, 4, 8, 16, 32, 64, '?', 'Pass']
+const PowersOfTwo = [0, 1, 2, 4, 8, 16, 32, 64, '?', 'Pass']
 const TShirt = ['XSS', 'XS', 'S', 'M', 'L', 'XL', 'XLL', '?', 'Pass']
 
 const Card = ({ value }) => (
@@ -14,22 +14,30 @@ const Card = ({ value }) => (
   </div>
 )
 
-const CardDeck = ({ cardSet = 'Fibonacci' }) => {
+const CardDeck = ({ cardSet = '' }) => {
+  let currentSet = ''
   if (cardSet) {
-    if (cardSet === 'Fibonacci') {
-      return Fibonacci.map(value => <Card key={value} value={value} />)
-    }
-    if (cardSet === 'Modified Fibonacci') {
-      return ModifiedFibonacci.map(value => <Card key={value} value={value} />)
-    }
-    if (cardSet === 'Powers Of 2') {
-      return PowersOf2.map(value => <Card key={value} value={value} />)
-    }
-    if (cardSet === 'T-Shirt') {
-      return TShirt.map(value => <Card key={value} value={value} />)
-    }
+    if (cardSet === 'Fibonacci')
+      currentSet = Fibonacci.map(value => (
+        <Card key={`card-${value}`} value={value} />
+      ))
 
-    return ''
+    if (cardSet === 'Modified Fibonacci')
+      currentSet = ModifiedFibonacci.map(value => (
+        <Card key={`card-${value}`} value={value} />
+      ))
+
+    if (cardSet === 'Powers of 2')
+      currentSet = PowersOfTwo.map(value => (
+        <Card key={`card-${value}`} value={value} />
+      ))
+
+    if (cardSet === 'T-Shirt')
+      currentSet = TShirt.map(value => (
+        <Card key={`card-${value}`} value={value} />
+      ))
+
+    return currentSet
   }
 
   return ''

@@ -13,6 +13,16 @@ app
   .then(() => {
     server
       .use(cookieParser())
+
+      .get('/session/:session', (req, res) => {
+        const actualPage = '/session'
+        const queryParams = Object.assign({}, req.params, {
+          session: req.params.session,
+        })
+
+        app.render(req, res, actualPage, queryParams)
+      })
+
       .get('*', (req, res) => handle(req, res))
       .listen(process.env.PORT || 3000)
   })

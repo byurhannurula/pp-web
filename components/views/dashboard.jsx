@@ -1,52 +1,29 @@
-/* eslint-disable react/display-name */
 /* eslin-disable */
 import React, { useState } from 'react'
-import { Mutation } from 'react-apollo'
-import { adopt } from 'react-adopt'
 import {
   Container,
   Row,
   Col,
   Card,
   CardHeader,
+  CardFooter,
   Button,
   Table,
-  Form,
-  FormGroup,
-  CardFooter,
 } from 'reactstrap'
+
 import User from '../User'
-import ModalBox from '../ModalBox'
 import Layout from '../layout/Layout'
 import SessionItem from '../SessionItem'
 import PaginationComponent from '../Pagination'
-
-import { START_SESSION_MUTATION, GET_USER } from '../../graphql'
-
-const Composed = adopt({
-  user: ({ render }) => <User>{render}</User>,
-  startSessionMutation: ({ render }) => (
-    <Mutation
-      mutation={START_SESSION_MUTATION}
-      refetchQueries={[{ query: GET_USER }]}
-    >
-      {render}
-    </Mutation>
-  ),
-})
+import StartSessionModal from '../StartSessionModal'
 
 const Index = () => {
   const [isToggled, toggleModal] = useState(false)
-  const [state, setState] = useState({ name: '', cardSet: '', polls: '' })
-
-  const handleChange = e => {
-    setState({ ...state, [e.target.name]: e.target.value })
-  }
 
   return (
-    <Composed>
-      {({ user, startSessionMutation }) => {
-        const me = user.data ? user.data.me : null
+    <User>
+      {({ data }) => {
+        const me = data ? data.me : null
 
         return (
           <Layout title="Dashboard">
@@ -105,83 +82,17 @@ const Index = () => {
               </Row>
               <Row>
                 <Col md="6">
-                  <ModalBox isToggled={isToggled} modalTitle="Create Session">
-                    <Form
-                      method="post"
-                      onSubmit={async e => {
-                        e.preventDefault()
-                        await startSessionMutation({ variables: { ...state } })
-                        setState({ name: '', cardSet: '', polls: '' })
-                        toggleModal(!isToggled)
-                      }}
-                    >
-                      <Row>
-                        <Col sm="7" md="7" className="pr-0">
-                          <FormGroup>
-                            <input
-                              type="text"
-                              name="name"
-                              value={state.name}
-                              className="form-control"
-                              onChange={handleChange}
-                              placeholder="Enter session name"
-                            />
-                          </FormGroup>
-                        </Col>
-
-                        <Col sm="5" md="5">
-                          <FormGroup>
-                            <select
-                              name="cardSet"
-                              value={state.cardSet}
-                              className="form-control"
-                              onChange={handleChange}
-                            >
-                              <option value="0" selected>
-                                Card Set
-                              </option>
-                              <option>Fibonacci</option>
-                              <option>Modified Fibonacci</option>
-                              <option>Powers of 2</option>
-                              <option>T-Shirt</option>
-                            </select>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <FormGroup>
-                        <input
-                          row="4"
-                          type="textarea"
-                          name="polls"
-                          value={state.polls}
-                          className="form-control mb-5"
-                          onChange={handleChange}
-                          placeholder="Enter stories, put each story on new line."
-                        />
-                      </FormGroup>
-
-                      <Col className="d-flex justify-content-end">
-                        <Button type="submit" color="primary">
-                          Create
-                        </Button>
-                        <Button
-                          type="button"
-                          color="secondary"
-                          data-dismiss="modal"
-                          onClick={() => toggleModal(!isToggled)}
-                        >
-                          Cancel
-                        </Button>
-                      </Col>
-                    </Form>
-                  </ModalBox>
+                  <StartSessionModal
+                    isToggled={isToggled}
+                    onClose={() => toggleModal(!isToggled)}
+                  />
                 </Col>
               </Row>
             </Container>
           </Layout>
         )
       }}
-    </Composed>
+    </User>
   )
 }
 export default Index
