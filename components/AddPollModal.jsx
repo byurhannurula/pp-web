@@ -4,9 +4,9 @@ import { Mutation } from 'react-apollo'
 
 import { Row, Col, Button, Modal, Form, FormGroup, CardBody } from 'reactstrap'
 
-import { ADD_POLL_MUTATION, GET_USER } from '../graphql'
+import { ADD_POLL_MUTATION, GET_SESSION } from '../graphql'
 
-const AddPollModal = ({ data, isToggled, onClose }) => {
+const AddPollModal = ({ id, isToggled, onClose }) => {
   const [state, setState] = useState({ topic: '', description: '' })
 
   const handleChange = e => {
@@ -16,7 +16,7 @@ const AddPollModal = ({ data, isToggled, onClose }) => {
   return (
     <Mutation
       mutation={ADD_POLL_MUTATION}
-      refetchQueries={[{ query: GET_USER }]}
+      refetchQueries={[{ query: GET_SESSION, variables: { id } }]}
     >
       {addPoll => {
         return (
@@ -29,7 +29,7 @@ const AddPollModal = ({ data, isToggled, onClose }) => {
                 method="post"
                 onSubmit={async e => {
                   e.preventDefault()
-                  await addPoll({ variables: { sessionId: data.id, ...state } })
+                  await addPoll({ variables: { sessionId: id, ...state } })
                   setState({ name: '', description: '' })
                 }}
               >
@@ -42,7 +42,7 @@ const AddPollModal = ({ data, isToggled, onClose }) => {
                         value={state.topic}
                         className="form-control"
                         onChange={handleChange}
-                        placeholder="Enter story"
+                        placeholder="Enter Story"
                         required
                       />
                     </FormGroup>
@@ -58,8 +58,7 @@ const AddPollModal = ({ data, isToggled, onClose }) => {
                         value={state.description}
                         className="form-control"
                         onChange={handleChange}
-                        placeholder="Enter story"
-                        required
+                        placeholder="Enter Description"
                       />
                     </FormGroup>
                   </Col>
@@ -67,7 +66,7 @@ const AddPollModal = ({ data, isToggled, onClose }) => {
 
                 <Col className="d-flex justify-content-end">
                   <Button type="submit" color="primary" onClick={onClose}>
-                    Create
+                    Add
                   </Button>
                   <Button
                     type="button"

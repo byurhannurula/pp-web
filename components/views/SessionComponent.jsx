@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { Query } from 'react-apollo'
@@ -98,15 +99,16 @@ const Session = ({ id }) => {
                         <tr>
                           <th scope="col">Story Name</th>
                           <th scope="col">Value</th>
-                          <th scope="col">Time</th>
+                          <th scope="col">Priority</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentSession.polls &&
-                          currentSession.polls.map(({ topic, result }) => (
-                            <tr key={`key-${topic}`}>
-                              <td>{topic}</td>
-                              <td>{result}</td>
+                          currentSession.polls.map(poll => (
+                            <tr>
+                              <td>{poll.topic}</td>
+                              <td>{poll.result}</td>
+                              <td>priority</td>
                             </tr>
                           ))}
                       </tbody>
@@ -191,7 +193,7 @@ const Session = ({ id }) => {
               <Row>
                 <Col md="6">
                   <AddPollModal
-                    data={id}
+                    id={id}
                     isToggled={isToggled}
                     onClose={() => toggleModal(!isToggled)}
                   />
