@@ -65,7 +65,7 @@ const AddPollModal = ({ id, isToggled, onClose }) => {
                 </Row>
 
                 <Col className="d-flex justify-content-end">
-                  <Button type="submit" color="primary" onClick={onClose}>
+                  <Button type="submit" color="primary">
                     Add
                   </Button>
                   <Button

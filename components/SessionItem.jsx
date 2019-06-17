@@ -70,20 +70,26 @@ const SessionItem = ({ session }) => {
 
             {session.members && (
               <td>
-                {session.members.map(member => (
-                  <div className="avatar-group" key={member.id}>
-                    <img
-                      id="user-1"
-                      alt={member.name}
-                      className="avatar avatar-sm rounded-circle"
-                      src={member.avatar}
-                    />
+                <div className="avatar-group">
+                  {session.members.map(member => (
+                    <>
+                      <img
+                        key={member.id}
+                        id={`user-${member.id}`}
+                        alt={member.name}
+                        className="avatar avatar-sm rounded-circle"
+                        src={member.avatar}
+                      />
 
-                    <UncontrolledTooltip delay={0} target="user-1">
-                      {member.name}
-                    </UncontrolledTooltip>
-                  </div>
-                ))}
+                      <UncontrolledTooltip
+                        delay={0}
+                        target={`user-${member.id}`}
+                      >
+                        {member.name}
+                      </UncontrolledTooltip>
+                    </>
+                  ))}
+                </div>
               </td>
             )}
 

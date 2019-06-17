@@ -28,26 +28,19 @@ const Layout = ({ children, title }) => (
                 <Row className="align-items-center justify-content-xl-between justify-content-xl-end">
                   <Col xl="6">
                     <div className="copyright text-center text-xl-left text-muted">
-                      &copy; {new Date().getFullYear()} &nbsp;
+                      &copy; {new Date().getFullYear()}
                       <Link href="/">
                         <a className="font-weight-bold ml-1">PokerPlanning</a>
                       </Link>
                     </div>
                   </Col>
-                </Row>
-                <Row className="align-items-center justify-content-xl-between justify-content-xl-end">
                   <Col xl="6">
                     <div className="copyright text-center text-xl-left text-muted">
-                      Made{' '}
-                      <span role="img" aria-label="Computer">
-                        👨🏻‍💻
-                      </span>{' '}
-                      by{' '}
+                      Made by{` `}
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
                         href="https://byurhanbeyzat.com"
-                        className="font-weight-bold ml-1"
                       >
                         Byurhan Beyzat
                       </a>

@@ -2,7 +2,6 @@
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { Query } from 'react-apollo'
-
 import {
   Row,
   Col,
@@ -15,17 +14,49 @@ import {
   Spinner,
   Button,
   Table,
+  Input,
 } from 'reactstrap'
-import keys from '../../config'
+
 import CardDeck from '../CardDeck'
 import Error from '../ErrorMessage'
 import Layout from '../layout/Layout'
 import AddPollModal from '../AddPollModal'
+import SessionSidebar from '../SessionSidebar'
 
 import { GET_SESSION } from '../../graphql'
 
 const Session = ({ id }) => {
   const [isToggled, toggleModal] = useState(false)
+  const [value, setValue] = useState('')
+  const [email, setEmail] = useState('')
+
+  const priorityOptions = [
+    {
+      label: 'Select',
+      value: null,
+    },
+    {
+      label: 'Must',
+      value: 'M',
+    },
+    {
+      label: 'Should',
+      value: 'S',
+    },
+    {
+      label: 'Could',
+      value: 'C',
+    },
+    {
+      label: "Won't",
+      value: 'W',
+    },
+  ]
+
+  const handleChange = async e => {
+    e.preventDefault()
+    setValue({ value: e.target.value })
+  }
 
   return (
     <Query query={GET_SESSION} variables={{ id }}>
@@ -98,7 +129,21 @@ const Session = ({ id }) => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">Story Name</th>
-                          <th scope="col">Value</th>
+                          <th scope="col">
+                            Value
+                            <svg
+                              width="12"
+                              height="12"
+                              fill="#545454"
+                              viewBox="0 0 24 24"
+                              style={{ marginLeft: '6px' }}
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M12 21L0 3h24z" />
+                              {/* <path d="M12 3l12 18h-24z" /> */}
+                            </svg>
+                          </th>
+
                           <th scope="col">Priority</th>
                         </tr>
                       </thead>
@@ -108,7 +153,19 @@ const Session = ({ id }) => {
                             <tr>
                               <td>{poll.topic}</td>
                               <td>{poll.result}</td>
-                              <td>priority</td>
+                              <td>
+                                <Input
+                                  type="select"
+                                  name="priority"
+                                  value={value}
+                                  onChange={e => handleChange(e)}
+                                  style={{ height: 'calc(1.5rem + 2px)' }}
+                                >
+                                  {priorityOptions.map(el => (
+                                    <option value={el.value}>{el.label}</option>
+                                  ))}
+                                </Input>
+                              </td>
                             </tr>
                           ))}
                       </tbody>
@@ -126,6 +183,13 @@ const Session = ({ id }) => {
                     </CardHeader>
 
                     <CardBody className="mt-1 pt-md-4">
+                      <SessionSidebar
+                        id={id}
+                        members={currentSession.members}
+                      />
+                    </CardBody>
+
+                    {/* <CardBody className="mt-1 pt-md-4">
                       <ul className="list my--3 list-group list-group-flush">
                         {currentSession.members.map(member => (
                           <li
@@ -148,32 +212,27 @@ const Session = ({ id }) => {
                           </li>
                         ))}
                       </ul>
-                      {/* {currentSession.isOwner === true && ( */}
+
                       {currentSession.members.length <= 8 && (
                         <div className="mt-5">
                           <h3>Invite a teammate</h3>
-                          <input
-                            type="text"
-                            readOnly
-                            className="form-control mb-2"
-                            value={`${
-                              process.env.NODE_ENV === 'development'
-                                ? `${keys.dev.SESSION_URL}?id=${
-                                    currentSession.id
-                                  }`
-                                : `${keys.prod.SESSION_URL}?id=${
-                                    currentSession.id
-                                  }`
-                            }`}
-                          />
-                          <p className="text-center mb-1">
-                            Or enter emails to send invitatins
-                          </p>
-                          <Form method="post">
+                          <Form
+                            method="post"
+                            onSubmit={async e => {
+                              e.preventDefault()
+                              await inviteMember({
+                                variables: { sessionId: id, email },
+                              })
+                              setEmail('')
+                            }}
+                          >
                             <textarea
                               row="5"
+                              name="email"
+                              value={email}
                               className="form-control"
-                              placeholder="Enter each email on a new line"
+                              onChange={e => setEmail(e.target.email)}
+                              placeholder="Enter email to invite member"
                             />
                             <Button
                               type="button"
@@ -185,8 +244,7 @@ const Session = ({ id }) => {
                           </Form>
                         </div>
                       )}
-                      {/* )} */}
-                    </CardBody>
+                    </CardBody> */}
                   </Card>
                 </Col>
               </Row>
