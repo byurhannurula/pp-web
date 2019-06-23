@@ -30,7 +30,7 @@ export const GET_USER = gql`
 
 export const GET_SESSIONS = gql`
   query getSessions {
-    getSessions {
+    getSessions(orderBy: DESC) {
       id
       name
       cardSet
@@ -73,6 +73,10 @@ export const GET_SESSION = gql`
         id
         topic
         description
+        priority
+        votes {
+          value
+        }
       }
       createdAt
     }

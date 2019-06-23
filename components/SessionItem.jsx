@@ -120,7 +120,9 @@ const SessionItem = ({ session }) => {
                   <DropdownItem
                     onClick={async e => {
                       e.preventDefault()
-                      await deleteSession({ variables: { id: session.id } })
+                      await deleteSession({
+                        variables: { sessionId: session.id },
+                      })
                     }}
                   >
                     Delete Session

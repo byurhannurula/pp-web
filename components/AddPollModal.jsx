@@ -29,7 +29,7 @@ const AddPollModal = ({ id, isToggled, onClose }) => {
                 method="post"
                 onSubmit={async e => {
                   e.preventDefault()
-                  await addPoll({ variables: { sessionId: id, ...state } })
+                  await addPoll({ variables: { session: id, ...state } })
                   setState({ topic: '', description: '' })
                 }}
               >

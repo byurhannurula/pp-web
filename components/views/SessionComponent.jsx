@@ -2,11 +2,11 @@
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { Query } from 'react-apollo'
+
 import {
   Row,
   Col,
   Card,
-  Form,
   CardHeader,
   CardBody,
   CardFooter,
@@ -27,13 +27,13 @@ import { GET_SESSION } from '../../graphql'
 
 const Session = ({ id }) => {
   const [isToggled, toggleModal] = useState(false)
-  const [value, setValue] = useState('')
-  const [email, setEmail] = useState('')
+  const [cardValue, setCardValue] = useState('')
+  const [optionValue, setOptionValue] = useState('')
 
   const priorityOptions = [
     {
       label: 'Select',
-      value: null,
+      value: '',
     },
     {
       label: 'Must',
@@ -53,9 +53,14 @@ const Session = ({ id }) => {
     },
   ]
 
-  const handleChange = async e => {
+  const handleChange = e => {
     e.preventDefault()
-    setValue({ value: e.target.value })
+    setOptionValue(e.target.value)
+  }
+
+  const clickHandle = e => {
+    e.preventDefault()
+    setCardValue(e.target.dataset.value)
   }
 
   return (
@@ -63,7 +68,7 @@ const Session = ({ id }) => {
       {({ data, error, loading }) => {
         const currentSession = data ? data.getSession : ''
 
-        if (loading) return <Spinner grow="true" />
+        if (loading) return <Spinner type="grow" color="primary" />
         if (error) return <Error error={error} />
 
         return (
@@ -96,7 +101,10 @@ const Session = ({ id }) => {
                     <CardBody>
                       {currentSession && currentSession.cardSet && (
                         <div className="d-flex align-items-center justify-content-around flex-wrap">
-                          <CardDeck cardSet={currentSession.cardSet} />
+                          <CardDeck
+                            cardSet={currentSession.cardSet}
+                            onClick={e => clickHandle(e)}
+                          />
                         </div>
                       )}
                     </CardBody>
@@ -150,19 +158,21 @@ const Session = ({ id }) => {
                       <tbody>
                         {currentSession.polls &&
                           currentSession.polls.map(poll => (
-                            <tr>
+                            <tr key={poll.id}>
                               <td>{poll.topic}</td>
                               <td>{poll.result}</td>
                               <td>
                                 <Input
                                   type="select"
-                                  name="priority"
-                                  value={value}
-                                  onChange={e => handleChange(e)}
+                                  // name="priority"
+                                  value={optionValue}
+                                  onChange={handleChange}
                                   style={{ height: 'calc(1.5rem + 2px)' }}
                                 >
                                   {priorityOptions.map(el => (
-                                    <option value={el.value}>{el.label}</option>
+                                    <option value={el.value} key={el.value}>
+                                      {el.label}
+                                    </option>
                                   ))}
                                 </Input>
                               </td>
@@ -185,66 +195,10 @@ const Session = ({ id }) => {
                     <CardBody className="mt-1 pt-md-4">
                       <SessionSidebar
                         id={id}
+                        memberCard={cardValue}
                         members={currentSession.members}
                       />
                     </CardBody>
-
-                    {/* <CardBody className="mt-1 pt-md-4">
-                      <ul className="list my--3 list-group list-group-flush">
-                        {currentSession.members.map(member => (
-                          <li
-                            className="px-0 list-group-item"
-                            key={`member-${member.id}`}
-                          >
-                            <div className="align-items-center row">
-                              <div className="col-auto col">
-                                <img
-                                  alt={member.name}
-                                  src={member.avatar}
-                                  className="avatar rounded-circle"
-                                />
-                              </div>
-
-                              <div className="col ml--2">
-                                <h4 className="mb-0">{member.name}</h4>
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {currentSession.members.length <= 8 && (
-                        <div className="mt-5">
-                          <h3>Invite a teammate</h3>
-                          <Form
-                            method="post"
-                            onSubmit={async e => {
-                              e.preventDefault()
-                              await inviteMember({
-                                variables: { sessionId: id, email },
-                              })
-                              setEmail('')
-                            }}
-                          >
-                            <textarea
-                              row="5"
-                              name="email"
-                              value={email}
-                              className="form-control"
-                              onChange={e => setEmail(e.target.email)}
-                              placeholder="Enter email to invite member"
-                            />
-                            <Button
-                              type="button"
-                              color="primary"
-                              className="mt-4"
-                            >
-                              Send invitation
-                            </Button>
-                          </Form>
-                        </div>
-                      )}
-                    </CardBody> */}
                   </Card>
                 </Col>
               </Row>

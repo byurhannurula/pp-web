@@ -70,8 +70,8 @@ export const UPDATE_SESSION_MUTATION = gql`
 `
 
 export const DELETE_SESSION_MUTATION = gql`
-  mutation DELETE_SESSION_MUTATION($id: String!) {
-    deleteSession(id: $id) {
+  mutation DELETE_SESSION_MUTATION($sessionId: String!) {
+    deleteSession(sessionId: $sessionId) {
       message
     }
   }
@@ -79,11 +79,11 @@ export const DELETE_SESSION_MUTATION = gql`
 
 export const ADD_POLL_MUTATION = gql`
   mutation ADD_POLL_MUTATION(
-    $sessionId: String!
+    $session: String!
     $topic: String!
     $description: String
   ) {
-    addPoll(sessionId: $sessionId, topic: $topic, description: $description) {
+    addPoll(session: $session, topic: $topic, description: $description) {
       id
       topic
       description
@@ -100,8 +100,8 @@ export const INVITE_MEMBER_MUTATION = gql`
 `
 
 export const DELETE_MEMBER_MUTATION = gql`
-  mutation DELETE_MEMBER_MUTATION($sessionId: String!, $email: String!) {
-    deleteMember(sessionId: $sessionId, email: $email) {
+  mutation DELETE_MEMBER_MUTATION($sessionId: String!, $userId: String!) {
+    deleteMember(sessionId: $sessionId, userId: $userId) {
       message
     }
   }

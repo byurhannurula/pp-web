@@ -67,7 +67,10 @@ const Index = () => {
                       </thead>
                       <tbody>
                         {me.sessions.map(session => (
-                          <SessionItem session={session} key={session.id} />
+                          <SessionItem
+                            session={session}
+                            key={`session-${session.id}`}
+                          />
                         ))}
                         <tr>
                           {!me.sessions.length === 0 && <td>No sessions</td>}
