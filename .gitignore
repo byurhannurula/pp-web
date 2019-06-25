@@ -52,7 +52,6 @@ typings/
 # dotenv environment variables file
 .env.development
 .env.production
-config.js
 
 # Next.js 
 .next/

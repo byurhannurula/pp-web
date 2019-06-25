@@ -15,7 +15,7 @@ import User from '../User'
 import Layout from '../layout/Layout'
 import SessionItem from '../SessionItem'
 import PaginationComponent from '../Pagination'
-import StartSessionModal from '../StartSessionModal'
+import StartSessionModal from '../modals/StartSessionModal'
 
 const Index = () => {
   const [isToggled, toggleModal] = useState(false)

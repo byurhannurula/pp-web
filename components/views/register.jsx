@@ -22,9 +22,11 @@ import Error from '../ErrorMessage'
 import { GET_USER, SIGNUP_MUTATION } from '../../graphql'
 
 const Register = ({ client }) => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [state, setState] = useState({ name: '', email: '', password: '' })
+
+  const handleChange = e => {
+    setState({ ...state, [e.target.name]: e.target.value })
+  }
 
   return (
     <Mutation
@@ -36,9 +38,7 @@ const Register = ({ client }) => {
         })
         console.log(data)
       }}
-      onError={error => {
-        console.log(error)
-      }}
+      onError={error => console.log(error)}
     >
       {(register, { error, loading }) => (
         <AuthLayout title="Register">
@@ -63,17 +63,8 @@ const Register = ({ client }) => {
                   onSubmit={async e => {
                     e.preventDefault()
                     e.stopPropagation()
-                    await register({
-                      variables: {
-                        name,
-                        email,
-                        password,
-                      },
-                    })
-
-                    setName('')
-                    setEmail('')
-                    setPassword('')
+                    await register({ variables: { ...state } })
+                    setState({ name: '', email: '', password: '' })
                   }}
                 >
                   <fieldset disabled={loading} aria-busy={loading}>
@@ -88,10 +79,10 @@ const Register = ({ client }) => {
                         <input
                           type="text"
                           name="name"
-                          value={name}
+                          value={state.name}
                           placeholder="Name"
                           className="form-control"
-                          onChange={e => setName(e.target.value)}
+                          onChange={handleChange}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -105,10 +96,10 @@ const Register = ({ client }) => {
                         <input
                           type="email"
                           name="email"
-                          value={email}
+                          value={state.email}
                           placeholder="Email"
                           className="form-control"
-                          onChange={e => setEmail(e.target.value)}
+                          onChange={handleChange}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -122,10 +113,10 @@ const Register = ({ client }) => {
                         <input
                           type="password"
                           name="password"
-                          value={password}
+                          value={state.password}
                           placeholder="Password"
                           className="form-control"
-                          onChange={e => setPassword(e.target.value)}
+                          onChange={handleChange}
                         />
                       </InputGroup>
                     </FormGroup>

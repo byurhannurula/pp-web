@@ -1,11 +1,15 @@
 import React from 'react'
+import { ApolloConsumer } from 'react-apollo'
 import SessionComponent from '../components/views/SessionComponent'
 
-const SessionPage = ({ id }) => <SessionComponent id={id} />
+const SessionPage = ({ id }) => (
+  <ApolloConsumer>
+    {client => <SessionComponent id={id} client={client} />}
+  </ApolloConsumer>
+)
 
 SessionPage.getInitialProps = async ({ query }) => {
   const { session } = query
-  console.log(query)
   return { id: session }
 }
 

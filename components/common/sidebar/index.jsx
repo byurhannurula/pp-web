@@ -1,8 +1,5 @@
-/*eslint-disable*/
 import React, { useState } from 'react'
 import Link from 'next/link'
-import Signout from '../../Signout'
-
 import {
   Collapse,
   DropdownMenu,
@@ -19,6 +16,7 @@ import {
   Row,
   Col,
 } from 'reactstrap'
+import Signout from '../../Signout'
 
 export const Sidebar = ({ logo, data }) => {
   const [isCollapsed, toggleCollapse] = useState(false)

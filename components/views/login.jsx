@@ -22,8 +22,11 @@ import Error from '../ErrorMessage'
 import { GET_USER, SIGNIN_MUTATION } from '../../graphql'
 
 const Login = ({ client }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [state, setState] = useState({ email: '', password: '' })
+
+  const handleChange = e => {
+    setState({ ...state, [e.target.name]: e.target.value })
+  }
 
   return (
     <Mutation
@@ -66,13 +69,9 @@ const Login = ({ client }) => {
                     e.preventDefault()
                     e.stopPropagation()
                     await login({
-                      variables: {
-                        email,
-                        password,
-                      },
+                      variables: { ...state },
                     })
-                    setEmail('')
-                    setPassword('')
+                    setState({ email: '', password: '' })
                   }}
                 >
                   <fieldset disabled={loading} aria-busy={loading}>
@@ -87,10 +86,10 @@ const Login = ({ client }) => {
                         <input
                           type="email"
                           name="email"
-                          value={email}
+                          value={state.email}
                           placeholder="Email"
                           className="form-control"
-                          onChange={e => setEmail(e.target.value)}
+                          onChange={handleChange}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -104,10 +103,10 @@ const Login = ({ client }) => {
                         <input
                           type="password"
                           name="password"
-                          value={password}
+                          value={state.password}
                           placeholder="Password"
                           className="form-control"
-                          onChange={e => setPassword(e.target.value)}
+                          onChange={handleChange}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -125,13 +124,7 @@ const Login = ({ client }) => {
               </CardBody>
             </Card>
             <Row className="mt-3 mb-5">
-              <Col xs="6">
-                <Link href="#pablo">
-                  <a className="text-primary">
-                    <small>Forgot password?</small>
-                  </a>
-                </Link>
-              </Col>
+              <Col xs="6" />
               <Col className="text-right" xs="6">
                 <Link href="/register">
                   <a className="text-primary">

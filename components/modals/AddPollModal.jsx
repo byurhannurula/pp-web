@@ -1,32 +1,23 @@
-/* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { Mutation } from 'react-apollo'
-import { adopt } from 'react-adopt'
+
 import { Row, Col, Button, Modal, Form, FormGroup, CardBody } from 'reactstrap'
 
-import { START_SESSION_MUTATION, GET_USER } from '../graphql'
+import { ADD_POLL_MUTATION, GET_SESSION } from '../../graphql'
 
-const Composed = adopt({
-  startSession: ({ render }) => (
-    <Mutation
-      mutation={START_SESSION_MUTATION}
-      refetchQueries={[{ query: GET_USER }]}
-    >
-      {render}
-    </Mutation>
-  ),
-})
-
-const ModalBox = ({ isToggled, onClose }) => {
-  const [state, setState] = useState({ name: '', cardSet: '' })
+const AddPollModal = ({ id, isToggled, onClose }) => {
+  const [state, setState] = useState({ topic: '', description: '' })
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
   return (
-    <Composed>
-      {({ startSession }) => {
+    <Mutation
+      mutation={ADD_POLL_MUTATION}
+      refetchQueries={[{ query: GET_SESSION, variables: { id } }]}
+    >
+      {addPoll => {
         return (
           <Modal className="modal-dialog-centered" isOpen={isToggled}>
             <div className="modal-header">
@@ -37,46 +28,44 @@ const ModalBox = ({ isToggled, onClose }) => {
                 method="post"
                 onSubmit={async e => {
                   e.preventDefault()
-                  await startSession({ variables: { ...state } })
-                  setState({ name: '', cardSet: '' })
+                  await addPoll({ variables: { session: id, ...state } })
+                  setState({ topic: '', description: '' })
                 }}
               >
                 <Row>
-                  <Col sm="7" md="7" className="pr-sm-0">
+                  <Col>
                     <FormGroup>
                       <input
                         type="text"
-                        name="name"
-                        value={state.name}
+                        name="topic"
+                        value={state.topic}
                         className="form-control"
                         onChange={handleChange}
-                        placeholder="Enter session name"
+                        placeholder="Enter Story"
                         required
                       />
                     </FormGroup>
                   </Col>
+                </Row>
 
-                  <Col sm="5" md="5">
+                <Row>
+                  <Col>
                     <FormGroup>
-                      <select
-                        name="cardSet"
-                        value={state.cardSet}
+                      <input
+                        type="text"
+                        name="description"
+                        value={state.description}
                         className="form-control"
                         onChange={handleChange}
-                      >
-                        <option>Card Set</option>
-                        <option>Fibonacci</option>
-                        <option>Modified Fibonacci</option>
-                        <option>Powers of 2</option>
-                        <option>T-Shirt</option>
-                      </select>
+                        placeholder="Enter Description"
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
 
                 <Col className="d-flex justify-content-end">
-                  <Button type="submit" color="primary" onClick={onClose}>
-                    Create
+                  <Button type="submit" color="primary">
+                    Add
                   </Button>
                   <Button
                     type="button"
@@ -92,8 +81,8 @@ const ModalBox = ({ isToggled, onClose }) => {
           </Modal>
         )
       }}
-    </Composed>
+    </Mutation>
   )
 }
 
-export default ModalBox
+export default AddPollModal

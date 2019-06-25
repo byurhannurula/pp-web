@@ -1,8 +1,6 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable react/display-name */
 import React, { useState } from 'react'
-import { Query } from 'react-apollo'
-
+import { Query, withApollo, Mutation } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import {
   Row,
   Col,
@@ -20,15 +18,29 @@ import {
 import CardDeck from '../CardDeck'
 import Error from '../ErrorMessage'
 import Layout from '../layout/Layout'
-import AddPollModal from '../AddPollModal'
+import AddPollModal from '../modals/AddPollModal'
 import SessionSidebar from '../SessionSidebar'
+import User from '../User'
 
-import { GET_SESSION } from '../../graphql'
+import { GET_SESSION, GET_POLL, ADD_VOTE_MUTATION } from '../../graphql'
 
-const Session = ({ id }) => {
+const Composed = adopt({
+  user: ({ render }) => <User>{render}</User>,
+  getSession: ({ sessionId, render }) => (
+    <Query query={GET_SESSION} variables={{ id: sessionId }}>
+      {render}
+    </Query>
+  ),
+  // addVote: ({ render }) => (
+  //   <Mutation mutation={ADD_VOTE_MUTATION} variables={{pollIduserId: }}>{render}</Mutation>
+  // ),
+})
+
+const Session = ({ client, id }) => {
   const [isToggled, toggleModal] = useState(false)
-  const [cardValue, setCardValue] = useState('')
+  const [cardValue, setCardValue] = useState()
   const [optionValue, setOptionValue] = useState('')
+  const [currentPoll, setCurrentPoll] = useState(null)
 
   const priorityOptions = [
     {
@@ -58,15 +70,26 @@ const Session = ({ id }) => {
     setOptionValue(e.target.value)
   }
 
-  const clickHandle = e => {
-    e.preventDefault()
-    setCardValue(e.target.dataset.value)
+  const handleClick = value => {
+    setCardValue(value)
+  }
+
+  const runPollQuery = async value => {
+    const { data } = await client.query({
+      query: GET_POLL,
+      variables: { id: value },
+    })
+    setCurrentPoll(data.getPoll)
   }
 
   return (
-    <Query query={GET_SESSION} variables={{ id }}>
-      {({ data, error, loading }) => {
-        const currentSession = data ? data.getSession : ''
+    <Composed sessionId={id}>
+      {({
+        user: { data: user, error, loading },
+        getSession: { data: session },
+      }) => {
+        const currentSession = session ? session.getSession : ''
+        const me = user ? user.me : ''
 
         if (loading) return <Spinner type="grow" color="primary" />
         if (error) return <Error error={error} />
@@ -91,9 +114,20 @@ const Session = ({ id }) => {
                   <Card className="shadow">
                     <CardHeader className="border-0">
                       <Row className="">
-                        <Col md="12">
-                          <h4 className="m-0">User stories here!</h4>
-                        </Col>
+                        {currentPoll ? (
+                          <>
+                            <Col md="8">
+                              <h4 className="m-0">{currentPoll.topic}</h4>
+                            </Col>
+                            <Col md="4">
+                              <p>{currentPoll.result}</p>
+                            </Col>
+                          </>
+                        ) : (
+                          <Col md="12">
+                            <h4 className="m-0">User stories here!</h4>
+                          </Col>
+                        )}
                       </Row>
                     </CardHeader>
                     <hr className="m-0 mb-1" />
@@ -103,7 +137,7 @@ const Session = ({ id }) => {
                         <div className="d-flex align-items-center justify-content-around flex-wrap">
                           <CardDeck
                             cardSet={currentSession.cardSet}
-                            onClick={e => clickHandle(e)}
+                            onClick={e => handleClick(e)}
                           />
                         </div>
                       )}
@@ -157,14 +191,21 @@ const Session = ({ id }) => {
                       </thead>
                       <tbody>
                         {currentSession.polls &&
-                          currentSession.polls.map(poll => (
-                            <tr key={poll.id}>
-                              <td>{poll.topic}</td>
-                              <td>{poll.result}</td>
+                          currentSession.polls.map(pl => (
+                            <tr key={pl.id}>
+                              <td>
+                                <a
+                                  onClick={() => runPollQuery(pl.id)}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  {pl.topic}
+                                </a>
+                              </td>
+                              <td>{pl.result}</td>
                               <td>
                                 <Input
                                   type="select"
-                                  // name="priority"
+                                  name="priority"
                                   value={optionValue}
                                   onChange={handleChange}
                                   style={{ height: 'calc(1.5rem + 2px)' }}
@@ -196,6 +237,7 @@ const Session = ({ id }) => {
                       <SessionSidebar
                         id={id}
                         memberCard={cardValue}
+                        pollData={currentPoll}
                         members={currentSession.members}
                       />
                     </CardBody>
@@ -215,8 +257,8 @@ const Session = ({ id }) => {
           </Layout>
         )
       }}
-    </Query>
+    </Composed>
   )
 }
 
-export default Session
+export default withApollo(Session)

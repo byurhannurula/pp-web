@@ -108,11 +108,7 @@ export const DELETE_MEMBER_MUTATION = gql`
 `
 
 export const ADD_VOTE_MUTATION = gql`
-  mutation ADD_VOTE_MUTATION(
-    $pollId: String!
-    $userId: String!
-    $value: String!
-  ) {
+  mutation ADD_VOTE_MUTATION($pollId: String!, $userId: String!, $value: Int!) {
     addVote(pollId: $pollId, userId: $userId, value: $value) {
       id
       value

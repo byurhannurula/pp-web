@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React from 'react'
 import { Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'

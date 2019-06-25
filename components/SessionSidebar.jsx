@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { Mutation, Query } from 'react-apollo'
 import { adopt } from 'react-adopt'
@@ -38,8 +35,9 @@ const Composed = adopt({
   ),
 })
 
-const SessionSidebar = ({ id, members, memberCard }) => {
+const SessionSidebar = ({ id, members, memberCard, pollData }) => {
   const [email, setEmail] = useState('')
+  const poll = pollData || ''
 
   return (
     <Composed id={id}>
@@ -53,6 +51,7 @@ const SessionSidebar = ({ id, members, memberCard }) => {
         inviteMember,
         deleteMember,
       }) => {
+        console.log(pollData)
         return (
           <>
             <ul className="list my--4 list-group list-group-flush">
@@ -79,7 +78,7 @@ const SessionSidebar = ({ id, members, memberCard }) => {
                         className="border d-flex align-items-center justify-content-center"
                         style={{ width: '32px', height: '42px' }}
                       >
-                        {memberCard}
+                        {/* {poll.votes[0].value} */}
                       </div>
                     </div>
 
@@ -95,7 +94,7 @@ const SessionSidebar = ({ id, members, memberCard }) => {
                                   sessionId: id,
                                   userId: member.id,
                                 },
-                              })
+                              }).catch(err => alert(err.message))
                               setEmail('')
                             }}
                           >

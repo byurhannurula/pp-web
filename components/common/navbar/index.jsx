@@ -1,7 +1,5 @@
-/* eslint-disable */
 import React from 'react'
 import Link from 'next/link'
-import Signout from '../../Signout'
 import {
   DropdownMenu,
   DropdownItem,
@@ -18,6 +16,7 @@ import {
   Container,
   Media,
 } from 'reactstrap'
+import Signout from '../../Signout'
 
 export const Navigation = ({ data }) => {
   return (

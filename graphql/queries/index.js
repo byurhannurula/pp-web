@@ -82,3 +82,28 @@ export const GET_SESSION = gql`
     }
   }
 `
+
+export const GET_POLL = gql`
+  query getPoll($id: ID!) {
+    getPoll(id: $id) {
+      id
+      topic
+      description
+      priority
+      result
+      votes {
+        id
+        value
+        user {
+          id
+          name
+        }
+      }
+      session {
+        id
+        name
+      }
+      createdAt
+    }
+  }
+`
