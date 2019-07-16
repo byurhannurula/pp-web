@@ -9,9 +9,11 @@ import {
   CardFooter,
   Button,
   Table,
+  Spinner,
 } from 'reactstrap'
 
 import User from '../User'
+import Error from '../ErrorMessage'
 import Layout from '../layout/Layout'
 import SessionItem from '../SessionItem'
 import PaginationComponent from '../Pagination'
@@ -22,8 +24,11 @@ const Index = () => {
 
   return (
     <User>
-      {({ data }) => {
+      {({ data, loading, error }) => {
         const me = data ? data.me : null
+
+        if (loading) return <Spinner type="grow" color="primary" />
+        if (error) return <Error error={error} />
 
         return (
           <Layout title="Dashboard">

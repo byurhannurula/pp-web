@@ -7,16 +7,17 @@
   pointer-events: auto;
   transition: transform 100ms ease-in-out;
 
-  &.selected {
-    transform: rotate(6deg) scale(1.1);
-  }
-
-  &:hover.selected {
-    transform: rotate(6deg) scale(1.1);
-  }
-
   &:hover {
     transform: scale(1.1);
+  }
+
+  &.selected {
+    transform: scale(1.1);
+  }
+  
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.7;
   }
 	
 	&__wrapper {
@@ -45,4 +46,11 @@
       }
     }
 	}
+}
+
+.deck {
+  &:hover {
+    transform: scale(1);
+  }
+  
 }

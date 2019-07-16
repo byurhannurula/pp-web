@@ -107,7 +107,7 @@ const SessionItem = ({ session }) => {
                       e.preventDefault()
                       await updateSession({
                         variables: {
-                          id: session.id,
+                          sessionId: session.id,
                           name: session.name,
                           cardSet: session.cardSet,
                         },

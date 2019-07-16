@@ -22,7 +22,14 @@ import AddPollModal from '../modals/AddPollModal'
 import SessionSidebar from '../SessionSidebar'
 import User from '../User'
 
-import { GET_SESSION, GET_POLL, ADD_VOTE_MUTATION } from '../../graphql'
+import {
+  GET_SESSION,
+  GET_POLL,
+  SAVE_POLL_MUTATION,
+  UPDATE_POLL_PRIORITY_MUTATION,
+  ADD_VOTE_MUTATION,
+  GET_POLL_VOTES,
+} from '../../graphql'
 
 const Composed = adopt({
   user: ({ render }) => <User>{render}</User>,
@@ -31,9 +38,25 @@ const Composed = adopt({
       {render}
     </Query>
   ),
-  // addVote: ({ render }) => (
-  //   <Mutation mutation={ADD_VOTE_MUTATION} variables={{pollIduserId: }}>{render}</Mutation>
-  // ),
+  addVote: ({ render }) => (
+    <Mutation mutation={ADD_VOTE_MUTATION}>{render}</Mutation>
+  ),
+  updatePollPriority: ({ sessionId, render }) => (
+    <Mutation
+      mutation={UPDATE_POLL_PRIORITY_MUTATION}
+      refetchQueries={[{ query: GET_SESSION, variables: { id: sessionId } }]}
+    >
+      {render}
+    </Mutation>
+  ),
+  savePoll: ({ sessionId, render }) => (
+    <Mutation
+      mutation={SAVE_POLL_MUTATION}
+      refetchQueries={[{ query: GET_SESSION, variables: { id: sessionId } }]}
+    >
+      {render}
+    </Mutation>
+  ),
 })
 
 const Session = ({ client, id }) => {
@@ -41,6 +64,9 @@ const Session = ({ client, id }) => {
   const [cardValue, setCardValue] = useState()
   const [optionValue, setOptionValue] = useState('')
   const [currentPoll, setCurrentPoll] = useState(null)
+  let votesSum = 0
+
+  const [disabled, setDisabled] = useState(false)
 
   const priorityOptions = [
     {
@@ -65,12 +91,8 @@ const Session = ({ client, id }) => {
     },
   ]
 
-  const handleChange = e => {
-    e.preventDefault()
-    setOptionValue(e.target.value)
-  }
-
   const handleClick = value => {
+    setDisabled(true)
     setCardValue(value)
   }
 
@@ -82,14 +104,37 @@ const Session = ({ client, id }) => {
     setCurrentPoll(data.getPoll)
   }
 
+  const calcVotes = async () => {
+    const { data } = await client.query({
+      query: GET_POLL_VOTES,
+      variables: { pollId: currentPoll.id },
+    })
+
+    let totalOfVotes = 0
+
+    data.getPollVotes.votes.map(({ value }) => {
+      totalOfVotes += value
+    })
+    votesSum = totalOfVotes
+    console.log(totalOfVotes, votesSum)
+    return votesSum
+  }
+
   return (
     <Composed sessionId={id}>
       {({
         user: { data: user, error, loading },
         getSession: { data: session },
+        addVote,
+        savePoll,
+        updatePollPriority,
       }) => {
         const currentSession = session ? session.getSession : ''
         const me = user ? user.me : ''
+
+        const poll = currentPoll || ''
+
+        console.log(poll, session)
 
         if (loading) return <Spinner type="grow" color="primary" />
         if (error) return <Error error={error} />
@@ -114,13 +159,28 @@ const Session = ({ client, id }) => {
                   <Card className="shadow">
                     <CardHeader className="border-0">
                       <Row className="">
-                        {currentPoll ? (
+                        {poll ? (
                           <>
                             <Col md="8">
-                              <h4 className="m-0">{currentPoll.topic}</h4>
+                              <h4 className="m-0">{poll.topic}</h4>
                             </Col>
                             <Col md="4">
-                              <p>{currentPoll.result}</p>
+                              <Button
+                                type="button"
+                                onClick={async e => {
+                                  e.preventDefault()
+                                  await calcVotes()
+                                  console.log(poll.id)
+                                  await savePoll({
+                                    variables: {
+                                      pollId: poll.id,
+                                      result: votesSum,
+                                    },
+                                  })
+                                }}
+                              >
+                                Save Poll
+                              </Button>
                             </Col>
                           </>
                         ) : (
@@ -136,8 +196,19 @@ const Session = ({ client, id }) => {
                       {currentSession && currentSession.cardSet && (
                         <div className="d-flex align-items-center justify-content-around flex-wrap">
                           <CardDeck
+                            isDisabled={disabled}
                             cardSet={currentSession.cardSet}
-                            onClick={e => handleClick(e)}
+                            onClick={async e => {
+                              await handleClick(e)
+                              console.log(cardValue)
+                              await addVote({
+                                variables: {
+                                  pollId: poll.id,
+                                  userId: me.id,
+                                  value: cardValue,
+                                },
+                              })
+                            }}
                           />
                         </div>
                       )}
@@ -171,22 +242,11 @@ const Session = ({ client, id }) => {
                       <thead className="thead-light">
                         <tr>
                           <th scope="col">Story Name</th>
-                          <th scope="col">
-                            Value
-                            <svg
-                              width="12"
-                              height="12"
-                              fill="#545454"
-                              viewBox="0 0 24 24"
-                              style={{ marginLeft: '6px' }}
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M12 21L0 3h24z" />
-                              {/* <path d="M12 3l12 18h-24z" /> */}
-                            </svg>
-                          </th>
-
+                          {currentSession.createdBy.id === me.id && (
+                            <th scope="col">Values</th>
+                          )}
                           <th scope="col">Priority</th>
+                          <th />
                         </tr>
                       </thead>
                       <tbody>
@@ -201,21 +261,52 @@ const Session = ({ client, id }) => {
                                   {pl.topic}
                                 </a>
                               </td>
-                              <td>{pl.result}</td>
+                              {currentSession.createdBy.id === me.id && (
+                                <td>
+                                  {pl.votes
+                                    .map(({ value }) => value)
+                                    .join(', ')}
+                                </td>
+                              )}
+
                               <td>
-                                <Input
-                                  type="select"
-                                  name="priority"
-                                  value={optionValue}
-                                  onChange={handleChange}
-                                  style={{ height: 'calc(1.5rem + 2px)' }}
+                                {pl.priority && pl.priority !== '' ? (
+                                  <p className="my-0">{pl.priority}</p>
+                                ) : (
+                                  <Input
+                                    type="select"
+                                    name={`priority-${pl.id}`}
+                                    value={optionValue[`priority-${pl.id}`]}
+                                    onChange={e =>
+                                      setOptionValue(e.target.value)
+                                    }
+                                    style={{ height: 'calc(1.5rem + 2px)' }}
+                                  >
+                                    {priorityOptions.map(el => (
+                                      <option value={el.value} key={el.value}>
+                                        {el.label}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                )}
+                              </td>
+                              <td className="px-0">
+                                <button
+                                  type="button"
+                                  size="sm"
+                                  className="btn btn-primary btn-sm"
+                                  onClick={async e => {
+                                    e.preventDefault()
+                                    await updatePollPriority({
+                                      variables: {
+                                        pollId: pl.id,
+                                        priority: optionValue,
+                                      },
+                                    })
+                                  }}
                                 >
-                                  {priorityOptions.map(el => (
-                                    <option value={el.value} key={el.value}>
-                                      {el.label}
-                                    </option>
-                                  ))}
-                                </Input>
+                                  Save
+                                </button>
                               </td>
                             </tr>
                           ))}

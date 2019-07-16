@@ -6,7 +6,7 @@ import { Row, Col, Button, Modal, Form, FormGroup, CardBody } from 'reactstrap'
 import { ADD_POLL_MUTATION, GET_SESSION } from '../../graphql'
 
 const AddPollModal = ({ id, isToggled, onClose }) => {
-  const [state, setState] = useState({ topic: '', description: '' })
+  const [state, setState] = useState({ topic: '' })
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value })
@@ -21,7 +21,7 @@ const AddPollModal = ({ id, isToggled, onClose }) => {
         return (
           <Modal className="modal-dialog-centered" isOpen={isToggled}>
             <div className="modal-header">
-              <h3 className="modal-title">Create Session</h3>
+              <h3 className="modal-title">Add Poll</h3>
             </div>
             <CardBody>
               <Form
@@ -29,7 +29,7 @@ const AddPollModal = ({ id, isToggled, onClose }) => {
                 onSubmit={async e => {
                   e.preventDefault()
                   await addPoll({ variables: { session: id, ...state } })
-                  setState({ topic: '', description: '' })
+                  setState({ topic: '' })
                 }}
               >
                 <Row>
@@ -43,21 +43,6 @@ const AddPollModal = ({ id, isToggled, onClose }) => {
                         onChange={handleChange}
                         placeholder="Enter Story"
                         required
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <input
-                        type="text"
-                        name="description"
-                        value={state.description}
-                        className="form-control"
-                        onChange={handleChange}
-                        placeholder="Enter Description"
                       />
                     </FormGroup>
                   </Col>

@@ -57,11 +57,11 @@ export const START_SESSION_MUTATION = gql`
 
 export const UPDATE_SESSION_MUTATION = gql`
   mutation UPDATE_SESSION_MUTATION(
-    $id: String!
+    $sessionId: String!
     $name: String
     $cardSet: String
   ) {
-    updateSession(id: $id, name: $name, cardSet: $cardSet) {
+    updateSession(sessionId: $sessionId, name: $name, cardSet: $cardSet) {
       id
       name
       cardSet
@@ -120,6 +120,39 @@ export const ADD_VOTE_MUTATION = gql`
         id
         name
       }
+    }
+  }
+`
+
+export const UPDATE_POLL_PRIORITY_MUTATION = gql`
+  mutation UPDATE_POLL_PRIORITY_MUTATION($pollId: String!, $priority: String!) {
+    updatePollPriority(pollId: $pollId, priority: $priority) {
+      message
+    }
+  }
+`
+
+export const SAVE_POLL_MUTATION = gql`
+  mutation SAVE_POLL_MUTATION($pollId: String!, $result: Float!) {
+    savePoll(pollId: $pollId, result: $result) {
+      id
+      topic
+      description
+      priority
+      result
+      votes {
+        id
+        value
+        user {
+          id
+          name
+        }
+      }
+      session {
+        id
+        name
+      }
+      createdAt
     }
   }
 `

@@ -46,6 +46,11 @@ export const GET_SESSIONS = gql`
         id
         topic
         description
+        priority
+        result
+        votes {
+          value
+        }
       }
       createdAt
       updatedAt
@@ -74,6 +79,7 @@ export const GET_SESSION = gql`
         topic
         description
         priority
+        result
         votes {
           value
         }
@@ -104,6 +110,21 @@ export const GET_POLL = gql`
         name
       }
       createdAt
+    }
+  }
+`
+
+export const GET_POLL_VOTES = gql`
+  query getPollVotes($pollId: ID!) {
+    getPollVotes(pollId: $pollId) {
+      votes {
+        id
+        value
+        user {
+          id
+          name
+        }
+      }
     }
   }
 `

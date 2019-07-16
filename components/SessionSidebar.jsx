@@ -35,23 +35,20 @@ const Composed = adopt({
   ),
 })
 
-const SessionSidebar = ({ id, members, memberCard, pollData }) => {
+const SessionSidebar = ({ id, members, pollData }) => {
   const [email, setEmail] = useState('')
-  const poll = pollData || ''
 
   return (
     <Composed id={id}>
       {({
-        user: {
-          data: { me },
-        },
-        getSession: {
-          data: { getSession: session },
-        },
+        user: { data: user },
+        getSession: { data: session },
         inviteMember,
         deleteMember,
       }) => {
-        console.log(pollData)
+        const me = user ? user.me : ''
+        const currentSession = session ? session.getSession : ''
+
         return (
           <>
             <ul className="list my--4 list-group list-group-flush">
@@ -73,18 +70,9 @@ const SessionSidebar = ({ id, members, memberCard, pollData }) => {
                       <h4 className="mb-0">{member.name}</h4>
                     </div>
 
-                    <div className="col ml-2">
-                      <div
-                        className="border d-flex align-items-center justify-content-center"
-                        style={{ width: '32px', height: '42px' }}
-                      >
-                        {/* {poll.votes[0].value} */}
-                      </div>
-                    </div>
-
-                    {session.createdBy.id === me.id &&
-                      session.createdBy.id !== member.id && (
-                        <div className="col">
+                    {currentSession.createdBy.id === me.id &&
+                      currentSession.createdBy.id !== member.id && (
+                        <div className="col ml-5">
                           <div
                             style={{ cursor: 'pointer' }}
                             onClick={async e => {
@@ -94,7 +82,7 @@ const SessionSidebar = ({ id, members, memberCard, pollData }) => {
                                   sessionId: id,
                                   userId: member.id,
                                 },
-                              }).catch(err => alert(err.message))
+                              })
                               setEmail('')
                             }}
                           >
