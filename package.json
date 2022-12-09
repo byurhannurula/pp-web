@@ -18,7 +18,7 @@
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^7.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "file-loader": "^3.0.1",
     "global": "^4.3.2",
     "graphql": "^14.1.1",
